@@ -1,0 +1,71 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: black;
+    color: white;
+}
+
+#container {
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid black;
+}
+
+tr {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 50px;
+    border-bottom: 1px solid #643DB5;
+}
+
+tr a {
+    color: #AA92E3;
+    font-weight: bold;
+}
+
+.cat {
+    border: 1px solid black;
+}
+
+.title {
+    font-weight: bold;
+}
+
+#surf {
+    font-weight: bold;
+    font-size: 40px;
+    color: #6D9DD5;
+    text-decoration: none;
+}
+
+tr {
+    text-align: left;
+}
+
+.url {
+    min-width: 150px;
+}
+
+.descr {
+    width: 100%;
+}
+
+.cat {
+    width: 80px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+#honeypot {
+    display: none;
+}
