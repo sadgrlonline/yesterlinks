@@ -25,6 +25,7 @@ Currently there are 2 pages:
 # The Database
 
 The database is the back-end which stores the data. Currently, the database exists of three columns:
+
 | id | title | url | description | category |
 
 # How to Contribute
