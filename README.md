@@ -18,9 +18,10 @@ You can play with a live demo at [https://miau.sadgrl.online/yesterlinks/](https
 
 # The Webpages
 
-Currently there are 2 pages:
-- Home (view only, public)
-- Edit (requires password, can edit/delete entries)
+Currently there are 3 pages:
+- Home (view only, public) /index.php
+- Submit (public, anti-bot) /submit-a-link.html
+- Edit (requires password, can edit/delete entries) /edit/
 
 # The Database
 
