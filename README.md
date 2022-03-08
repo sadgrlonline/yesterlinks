@@ -44,6 +44,9 @@ Here are some ideas of what I need assistance with:
 Detailed instructions coming soon!
 
 # To Do List
+- Add category descriptions
 - Create authentication (user/admin accounts)
 - Set up approval system.
 - Figure out how to do a public ranking/comment system?
+- Test on mobile
+- Update demo
