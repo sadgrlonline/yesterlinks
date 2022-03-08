@@ -25,7 +25,7 @@ Currently there are 3 pages:
 
 # The Database
 
-The database is the back-end which stores the data. Currently, the database exists of three columns:
+The database is the back-end which stores the data. Currently, the database exists of five columns:
 
 | id | title | url | description | category |
 
