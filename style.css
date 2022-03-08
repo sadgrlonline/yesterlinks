@@ -7,14 +7,29 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background-color: black;
+    background-color: #161616;
     color: white;
 }
 
-#container {
+.container {
     max-width: 900px;
     margin: 0 auto;
-    border: 1px solid black;
+    border: 1px solid white;
+}
+
+.wrapper {
+    margin: 10px;
+    border: 1px solid white;
+    background-color: #161616;
+}
+
+table {
+    border: 1px solid #643DB5;
+    margin: 20px;
+}
+
+td {
+    padding: 10px;
 }
 
 tr {
@@ -25,13 +40,20 @@ tr {
     border-bottom: 1px solid #643DB5;
 }
 
+tr:nth-child(odd) {
+    background-color: #494949;
+}
+
+tr:nth-child(even) {}
+
 tr a {
-    color: #AA92E3;
+    color: #ff8cff;
     font-weight: bold;
 }
 
-.cat {
-    border: 1px solid black;
+th {
+    cursor: pointer;
+    background-color: #56289B;
 }
 
 .title {
@@ -45,6 +67,18 @@ tr a {
     text-decoration: none;
 }
 
+.surf {
+    text-align: center;
+    border: 1px solid white;
+    margin: 20px;
+    width: 50%;
+}
+
+h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
 tr {
     text-align: left;
 }
@@ -54,18 +88,33 @@ tr {
 }
 
 .descr {
-    width: 100%;
+    width: 90%;
 }
 
 .cat {
-    width: 80px;
+    min-width: 100px;
 }
 
-label {
+label:not('.filter') {
     display: block;
     font-weight: bold;
 }
 
+.filters label {
+    font-weight: bold !important;
+}
+
 #honeypot {
     display: none;
+}
+
+#filters {
+    border: 1px solid white;
+    margin: 20px;
+    padding: 20px;
+    width: 50%;
+}
+
+.flex {
+    display: flex;
 }
