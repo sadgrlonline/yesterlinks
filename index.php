@@ -10,8 +10,11 @@
     </head>
     <body>
         <div class="container">
+            <?php include 'navigation.php'; ?>
             <div class="wrapper">
                 <h1>Yesterlinks</h1>
+                <p class="intro">Remember when the internet felt exciting and mysterious?</p>
+                <p class="intro">This is a directory of awesome websites.</p>
                 <div class="flex">
                     <div id="filters">
                         <strong>
@@ -28,6 +31,8 @@
                             <input type="checkbox" id="useful" name="useful" rel="useful" value="useful" checked><br>
                             <label for="social">Social</label>
                             <input type="checkbox" id="social" name="social" rel="social" value="social" checked><br>
+                             <label for="social">Personal</label>
+                            <input type="checkbox" id="personal" name="personal rel="personal" value="personal" checked><br>
                         </div>
                     </div>
                     <div class="surf">
@@ -48,7 +53,7 @@
                         <?php
                         include "config.php";
 
-                        $stmt = $con->prepare("SELECT * FROM websites ORDER BY id DESC");
+                        $stmt = $con->prepare("SELECT * FROM websites WHERE pending = 0 ORDER BY id DESC");
                         $stmt->execute();
                         $result = $stmt->get_result();
                         $stmt->close();
