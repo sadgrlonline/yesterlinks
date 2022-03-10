@@ -19,7 +19,6 @@ body {
 
 .wrapper {
     margin: 10px;
-    border: 1px solid white;
     background-color: #161616;
 }
 
@@ -43,8 +42,6 @@ tr {
 tr:nth-child(odd) {
     background-color: #494949;
 }
-
-tr:nth-child(even) {}
 
 tr a {
     color: #ff8cff;
@@ -76,7 +73,7 @@ th {
 
 h1 {
     font-size: 50px;
-    text-align: center;
+    margin-left: 20px;
 }
 
 tr {
@@ -95,7 +92,7 @@ tr {
     min-width: 100px;
 }
 
-label:not('.filter') {
+label:not('.filters') {
     display: block;
     font-weight: bold;
 }
@@ -117,4 +114,42 @@ label:not('.filter') {
 
 .flex {
     display: flex;
+}
+
+
+input:not(input[type=checkbox]) {
+    margin-bottom: 10px;
+}
+
+input[type=checkbox] {
+    display: inline;
+}
+
+#dupe {
+    color: red;
+    font-weight: bold;
+    display: none;
+}
+
+.contain {
+    margin-left: 20px;
+}
+
+.intro {
+    margin-left: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    font-weight: bold;
+    padding-right: 40px;
 }
