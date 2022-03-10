@@ -21,7 +21,7 @@ You can play with a live demo at [https://miau.sadgrl.online/yesterlinks/](https
 Currently there are 3 pages:
 - Home (view only, public) /index.php
 - Submit (public, anti-bot) /submit-a-link.html
-- Edit (requires password, can edit/delete entries) /edit/
+- Admin (requires password, can edit/delete/approve entries) /admin/
 
 # The Database
 
