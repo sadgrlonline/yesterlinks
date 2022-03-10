@@ -45,5 +45,16 @@ if (isset($_POST['submit'])) {
             $stmt->bind_param("ssss", $title, $url, $descr, $cat);
             $stmt->execute();
             $stmt->close();
+            header('location: submit-a-link.php');
         }
+
+}
+
+  // this block handles approvals logic
+  if (isset($_POST['approved'])) {
+    $id = $_POST['id'];
+    $stmt = $con->prepare("UPDATE websites SET pending = 0 WHERE id = ?");
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    $stmt->close();
 }
