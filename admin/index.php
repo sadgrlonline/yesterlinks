@@ -9,40 +9,7 @@
     <body>
         <div class="container">
         <?php include 'navigation.php' ?>
-            <h1>Edit Links</h1>
-            <div id="filters">
-                <strong>
-                    <span class="rainbow-text">Filter</span> your results to a certain type of
-                    site!
-                </strong><br><br>
-                <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
-                        <div class="filter">
-                            <label for="personal">Personal</label>
-                            <input type="checkbox" id="personal" name="personal" value="personal">
-                        </div>
-                        <div class="filter">
-                            <label for="fun">Fun</label>
-                            <input type="checkbox" id="fun" name="fun" value="fun">
-                        </div>
-                        <div class="filter">
-                            <label for="healing">Healing</label>
-                            <input type="checkbox" id="healing" name="healing" value="healing">
-                        </div>
-                        <div class="filter">
-                            <label for="serious">Serious</label>
-                            <input type="checkbox" id="serious" name="serious" value="serious">
-                        </div>
-                        <div class="filter">
-                            <label for="useful">Useful</label>
-                            <input type="checkbox" id="useful" name="useful" value="useful">
-                        </div>
-                        <div class="filter">
-                            <label for="social">Social</label>
-                            <input type="checkbox" id="social" name="social" value="social">
-                        </div>
-
-                    </div>
-</div>
+            <h1>Yesterlinks Admin</h1>
         <table id="directory">
         <div class="row">
             <thead>
