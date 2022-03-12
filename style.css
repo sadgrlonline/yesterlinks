@@ -49,8 +49,6 @@ body a {
     background-color: #161616;
 }
 
-table {}
-
 td {
     padding: 10px;
 }
@@ -182,10 +180,6 @@ input[type=checkbox] {
 [data-attr="personal"] {
     color: rgb(170, 115, 216);
 }
-
-
-.contain {}
-
 
 nav ul {
     list-style-type: none;
