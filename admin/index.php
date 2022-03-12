@@ -176,7 +176,7 @@ $('td').on("click", ".edit", function(e) {
                    'descr':descr,
                    'cat':cat
 			},
-			url: 'submit.php',
+			url: '../submit.php',
 			success: function(response) {
              //location.reload();
 			}
