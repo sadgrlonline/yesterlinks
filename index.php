@@ -19,17 +19,18 @@
                         <details>
                         <summary>What is this?</summary>
                         <p class="small">This is a user-curated directory of interesting off-the-beaten path websites. Use the checkboxes to filter by category, or click the table headings to sort columns alphabetically. Every time this page reloads, the order of websites are shuffled.</p>
-                        <p class="small">You can use the "Surf" button to load a webpage at random, or add/drag <a href="https://links.yesterweb.org/surf.html">this link</a> to your bookmarks bar and you can click it to surf a random page.</p>
+                        <p class="small">You can use the "Surf" button to load a webpage at random, or add/drag this <a href="https://links.yesterweb.org/surf.html">Surf</a> link to your bookmarks bar and you can click it to surf a random page.</p>
                         <p>Want to contribute? Check out the <a href="https://github.com/sadgrlonline/yesterlinks" target="_blank">Github</a>!</p>
                         </details>
                     </div>
                     <div class="surf">
                         <a href="#" id="surf" target="_blank">Random</a>
                         <p>This will open a site at random in a new tab.</p>
-                        <p>Or, you can drag <a href="https://links.yesterweb.org/surf.html">this link</a> to your bookmark bar and click it for a random page.</p>
+                        <p>Or, you can drag this <a href="https://links.yesterweb.org/surf.html">Surf</a> link to your bookmark bar and click it for a random page.</p>
                         
                     </div>
                 </div>
+                <div class="flex filterSearch">
                 <div id="filters">
                         <details>
                             <summary class="filterButton">
@@ -51,6 +52,9 @@
                         </div>
                         </details>
                     </div>
+<div id="search"><label>Search: </label><input type="text" id="searchInput">
+</div>
+</div>
                 <table id="directory">
                     <thead> 
                             <th class="url title">Title <i class="fa fa-sort fa-1x"></i></th>
@@ -181,6 +185,24 @@ $('input[type=checkbox]').on("change", function() {
     }
 }
 
+});
+
+$('#searchInput').on('keyup', function() {
+  var value = $(this).val();
+  var patt = new RegExp(value, "i");
+
+  $('#directory').find('tr').each(function() {
+    var $table = $(this);
+    
+    if (!($table.find('td').text().search(patt) >= 0)) {
+      $table.not('.t_head').hide();
+    }
+    if (($table.find('td').text().search(patt) >= 0)) {
+      $(this).show();
+    }
+    
+  });
+ 
 });
 
 </script>

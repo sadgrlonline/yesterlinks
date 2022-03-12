@@ -224,3 +224,18 @@ summary {
 .small {
     font-size: 12px;
 }
+
+#search {
+    max-width: 50%;
+    justify-content: flex-end;
+}
+
+#search label {
+    font-weight: bold;
+    color: var(--accent2);
+}
+
+.filterSearch {
+    display: flex;
+    justify-content: space-between;
+}
