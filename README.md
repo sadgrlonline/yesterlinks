@@ -14,7 +14,7 @@ The goal of this project is to create a database of links to cool or interesting
 
 # Demo
 
-You can play with a live demo at [https://miau.sadgrl.online/yesterlinks/](https://miau.sadgrl.online/yesterlinks/)
+You can play with a live demo at [https://links.yesterweb.org/](https://links.yesterweb.org/)
 
 # The Webpages
 
