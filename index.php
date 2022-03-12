@@ -12,14 +12,27 @@
         <div class="container">
             <?php include 'navigation.php'; ?>
             <div class="wrapper">
-                <h1>Yesterlinks</h1>
-                <p class="intro">Remember when the internet felt exciting and mysterious?</p>
-                <p class="intro">This is a directory of awesome websites.</p>
                 <div class="flex">
-                    <div id="filters">
-                        <strong>
-                        <span class="rainbow-text">Filter</span> your results to a certain type of
-                        site!</strong><br><br>
+                    <div>
+                        <h1>Yesterlinks</h1>
+                        <p>Remember when the internet felt exciting and mysterious?</p>
+                        <details>
+                        <summary>What is this?</summary>
+                        <p class="small">This is a user-curated directory of interesting off-the-beaten path websites. Use the checkboxes to filter by category, or click the table headings to sort columns alphabetically. Every time this page reloads, the order of websites are shuffled.</p>
+                        <p class="small">You can use the "Surf" button to load a webpage at random, or add/drag <a href="https://links.yesterweb.org/surf.html">this link</a> to your bookmarks bar and you can click it to surf a random page.</p>
+                        </details>
+                    </div>
+                    <div class="surf">
+                        <a href="#" id="surf" target="_blank">Random</a>
+                        <p>This will open a site at random in a new tab.</p>
+                        <p>Or, you can drag <a href="https://links.yesterweb.org/surf.html">this link</a> to your bookmark bar and click it for a random page.</p>
+                    </div>
+                </div>
+                <div id="filters">
+                        <details>
+                            <summary class="filterButton">
+                            <i class="fa fa-filter fa-1x"></i> <span class="intro">FILTER</a>
+                            </summary>
                         <div class="filters">
                             <label for="fun">Fun</label>
                             <input type="checkbox" id="fun" name="fun" rel="fun" value="fun" checked><br>
@@ -34,13 +47,8 @@
                              <label for="social">Personal</label>
                             <input type="checkbox" id="personal" name="personal rel="personal" value="personal" checked><br>
                         </div>
+                        </details>
                     </div>
-                    <div class="surf">
-                        <br> <p>Or just click <strong class="rainbow-text">surf</strong>.</p>
-                        <a href="#" id="surf" target="_blank">Surf</a>
-                        <p>This will open a site at random in a new tab.</p>
-                    </div>
-                </div>
                 <table id="directory">
                     <thead> 
                             <th class="url title">Title <i class="fa fa-sort fa-1x"></i></th>
@@ -53,7 +61,7 @@
                         <?php
                         include "config.php";
 
-                        $stmt = $con->prepare("SELECT * FROM websites WHERE pending = 0 ORDER BY id DESC");
+                        $stmt = $con->prepare("SELECT * FROM websites WHERE pending = 0 ORDER BY rand()");
                         $stmt->execute();
                         $result = $stmt->get_result();
                         $stmt->close();
@@ -86,7 +94,7 @@
                             if ($descr === '') {
                                 echo '<td class="desc">No description added.</td>';
                             } else {
-                            echo '<td class="descr">' . $descr . '</a></td>';
+                            echo '<td class="descr">' . strtolower($descr) . '</a></td>';
                             }
                             echo '<td class="cat" data-attr="' . $cat . '">' . $cat . '</td>';
                             echo '</tr>';
