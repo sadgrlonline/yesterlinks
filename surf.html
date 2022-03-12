@@ -1,0 +1,13 @@
+<script>
+    fetch("https://miau.sadgrl.online/yesterlinks/yesterlinks.json")
+.then(response => {
+   return response.json();
+})    
+  .then((sites) => {
+      var random;
+      random = Math.floor(Math.random() * sites.length);
+          randomSite = sites[random].url;
+          console.log(randomSite);
+          window.location.href = randomSite;
+  })
+</script>
