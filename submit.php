@@ -16,6 +16,20 @@ if (isset($_POST['cat'])) {
      $stmt->execute();
      $result = $stmt->get_result();
      $stmt->close();
+     
+    // this generates the JSON file
+    $rows = array();
+    $sql = ("SELECT id, title, url, descr, category FROM websites WHERE pending = 0");
+    mysqli_set_charset($con, 'utf8');
+    if ($result = mysqli_query($con, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $rows[] = $row;
+            }
+        $f = fopen('yesterlinks.json', 'w');
+        fwrite($f, json_encode($rows));
+        }
+    }
 }
 
 // handles deletions
@@ -25,6 +39,20 @@ if (isset($_POST['del'])) {
     $stmt->bind_param("s", $id);
     $stmt->execute();
     $stmt->close();
+    
+    // this generates the JSON file
+    $rows = array();
+    $sql = ("SELECT id, title, url, descr, category FROM websites WHERE pending = 0");
+    mysqli_set_charset($con, 'utf8');
+    if ($result = mysqli_query($con, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $rows[] = $row;
+            }
+        $f = fopen('yesterlinks.json', 'w');
+        fwrite($f, json_encode($rows));
+        }
+    }
 }
 
 // handles submissions
@@ -57,4 +85,18 @@ if (isset($_POST['submit'])) {
     $stmt->bind_param("s", $id);
     $stmt->execute();
     $stmt->close();
+    
+        // this generates the JSON file
+    $rows = array();
+    $sql = ("SELECT id, title, url, descr, category FROM websites WHERE pending = 0");
+    mysqli_set_charset($con, 'utf8');
+    if ($result = mysqli_query($con, $sql)) {
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $rows[] = $row;
+            }
+        $f = fopen('yesterlinks.json', 'w');
+        fwrite($f, json_encode($rows));
+        }
+    }
 }
