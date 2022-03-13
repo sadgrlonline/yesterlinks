@@ -131,6 +131,7 @@ var catArr = <?php echo json_encode($catarray); ?>;
 var random;
 
 $(function() {
+  $('#searchInput').val('');
   $("#directory").tablesorter();
 });
 
@@ -193,22 +194,41 @@ $('input[type=checkbox]').on("change", function() {
 
 });
 
-$('#searchInput').on('keyup', function() {
-  var value = $(this).val();
-  var patt = new RegExp(value, "i");
+$('#searchInput').on('keyup', function(e) {
+    // value of text field
+    var value = $(this).val();
+    console.log(e.keyCode);
 
-  $('#directory').find('tr').each(function() {
-    var $table = $(this);
-    
-    if (!($table.find('td').text().search(patt) >= 0)) {
-      $table.not('.t_head').hide();
-    }
-    if (($table.find('td').text().search(patt) >= 0)) {
-      $(this).show();
-    }
-    
-  });
- 
+    // assigns the pattern we're searching for
+    var patt = new RegExp(value, "i");
+    // in the #directory table, find each tr 
+    $('#directory').find('tr').each(function() {
+        if(value.length === 0) {
+            // if search box is empty
+            // loop through rows and make highlight 'invisible'.
+            console.log('remove Mark');
+            //$(this).children('td.descr').children(mark))
+            $('mark').css('background-color', 'transparent');
+            $('mark').css('padding', '0');
+
+        }
+
+        var $table = $(this);
+
+        if (!($table.find('td').text().search(patt) >= 0)) {
+            $table.not('th').hide();
+
+        }
+        
+        if (($table.find('td').text().search(patt) >= 0)) {
+            $(this).show();
+            var td = $(this).children('td.descr');
+            var matchedRow = td.text();
+            var newMarkup = matchedRow.replace(value, '<mark>' + value + '</mark>');
+            td.html(newMarkup);
+
+        }
+    });
 });
 
 </script>

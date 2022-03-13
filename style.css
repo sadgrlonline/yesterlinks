@@ -239,3 +239,8 @@ summary {
     display: flex;
     justify-content: space-between;
 }
+
+mark {
+    padding: 5px;
+    background-color: rgb(243, 243, 136);
+}
