@@ -9,6 +9,15 @@
       
     </head>
     <body>
+    <?php
+                        include "config.php";
+
+                        $sql = "SELECT COUNT(*) FROM websites WHERE pending = 0";
+                        $qry = mysqli_query($con, $sql);
+                        $totalCount = mysqli_fetch_assoc($qry)['COUNT(*)'];
+
+                        ?>
+        
         <div class="container">
             <?php include 'navigation.php'; ?>
             <div class="wrapper">
@@ -16,6 +25,7 @@
                     <div>
                         <h1>Yesterlinks</h1>
                         <p>Remember when the internet felt exciting and mysterious?</p>
+                        <p>Here are <strong><?php echo $totalCount ?></strong> links!</p>
                         <details>
                         <summary>What is this?</summary>
                         <p class="small">This is a user-curated directory of interesting off-the-beaten path websites. Use the checkboxes to filter by category, or click the table headings to sort columns alphabetically. Every time this page reloads, the order of websites are shuffled.</p>
@@ -65,16 +75,12 @@
                     <tbody>
 
                         <?php
-                        include "config.php";
 
                         $stmt = $con->prepare("SELECT * FROM websites WHERE pending = 0 ORDER BY rand()");
                         $stmt->execute();
                         $result = $stmt->get_result();
                         $stmt->close();
 
-                        $sql = "SELECT COUNT(*) FROM websites";
-                        $qry = mysqli_query($con, $sql);
-                        $totalCount = mysqli_fetch_assoc($qry)['COUNT(*)'];
 
                         $idarray = [];
                         $urlarray = [];
