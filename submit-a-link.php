@@ -28,6 +28,18 @@
                         <label>Webpage URL</label> <input type="url" name="urlInput" id="urlInput" required><br><span id="dupe">This item is a duplicate.</span>
                         <label>Webpage Description</label><textarea name="descrInput" id="descrInput" required></textarea><br>
                         <label>Webpage Category</label> <select name="categories" id="categories"><option></option></select>
+                        <fieldset class="tags__edit">
+                          <legend>Website Tags</legend>
+                          <?php
+                          /* loop for displaying the checkboxes */
+                          $get_all_tags = mysqli_query($con, "SELECT * FROM tags ORDER BY tags.name ASC"); // query all tags for displaying the checkboxes
+                          while ($single_tag = mysqli_fetch_assoc($get_all_tags)) { ?>
+                            <div>
+                              <input type="checkbox" id="<?php echo $single_tag['name']; ?>" name="<?php echo $single_tag['name']; ?>" value="<?php echo $single_tag['id']; ?>">
+                              <label for="<?php echo $single_tag['name']; ?>"><?php echo $single_tag['name']; ?></label>
+                            </div>
+                          <?php } ?>
+                        </fieldset>
                         <br><br>
 
                         <input type="text" id="honeypot" name="honeypot">
@@ -59,7 +71,7 @@
  $stmt->close();
  ?>
 
- 
+
 
 
 <script>
@@ -70,7 +82,7 @@ console.log('test');
     var submitBtn = document.getElementById('submit');
 
     urlInput.addEventListener("change", checkIfDupe);
-    
+
 
     function checkIfDupe() {
         var value = urlInput.value;
@@ -104,6 +116,6 @@ console.log('test');
     for (let i = 0; i < results.length; i++) {
         $('#categories').append('<option value="' + results[i] + '" name="categories">' + results[i] + '</option>');
     }
-    
+
     </script>
 </html>

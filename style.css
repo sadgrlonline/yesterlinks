@@ -1,246 +1,279 @@
 :root {
-    --accent: #643DB5;
-    --accent2: #ff8cff;
+  --accent: #643DB5;
+  --accent2: #ff8cff;
 }
 
 @font-face {
-    font-family: Digivolve;
-    src: url('assets/fonts/Digivolve.otf');
+  font-family: Digivolve;
+  src: url('assets/fonts/Digivolve.otf');
 }
 
 @font-face {
-    font-family: 'Dogica';
-    src: url('assets/fonts/dogicapixel.ttf');
+  font-family: 'Dogica';
+  src: url('assets/fonts/dogicapixel.ttf');
 }
 
 @font-face {
-    font-family: 'Dogica';
-    src: url('assets/fonts/dogicapixelbold.ttf');
-    font-weight: bold;
+  font-family: 'Dogica';
+  src: url('assets/fonts/dogicapixelbold.ttf');
+  font-weight: bold;
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Dogica', sans-serif;
-    background-color: #161616;
-    color: white;
-    font-size: 12px;
-    line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+  font-family: 'Dogica', sans-serif;
+  background-color: #161616;
+  color: white;
+  font-size: 12px;
+  line-height: 1.5em;
 
 }
 
 body a {
-    color: var(--accent2);
+  color: var(--accent2);
 }
 
 .container {
-    max-width: 900px;
-    margin: 0 auto;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .wrapper {
-    margin: 10px;
-    background-color: #161616;
+  margin: 10px;
+  background-color: #161616;
 }
 
 td {
-    padding: 10px;
+  padding: 10px;
 }
 
 tr {
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    height: 50px;
-    border-bottom: 1px solid var(--accent);
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: 50px;
+  border-bottom: 1px solid var(--accent);
 }
 
-tr:nth-child(odd) {
-    background-color: #494949;
+tbody tr:nth-child(even) {
+  background-color: #161616;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #494949;
 }
 
 tr a {
-    color: var(--accent2);
-    font-weight: bold;
-    text-decoration: none;
+  color: var(--accent2);
+  font-weight: bold;
+  text-decoration: none;
 }
 
 th {
-    cursor: pointer;
-    background-color: var(--accent);
-    padding: 10px;
+  cursor: pointer;
+  background-color: var(--accent);
+  padding: 10px;
 }
 
-.title {
-    font-weight: bold;
+tbody .title {
+  font-weight: bold;
+  position: sticky;
+  left: 0;
+  background-color: inherit;
 }
 
 #surf {
-    font-weight: bold;
-    font-size: 20px;
-    color: #6D9DD5;
-    text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
+  color: #6D9DD5;
+  text-decoration: none;
 }
 
 .surf {
-    text-align: right;
-    width: 50%;
-    margin-left: 20px;
-    margin-top: 10px;
+  text-align: right;
+  width: 50%;
+  margin-left: 20px;
+  margin-top: 10px;
 }
 
 h1 {
-    font-size: 60px;
-    font-family: 'Digivolve';
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-top: 20px;
+  font-size: 60px;
+  font-family: 'Digivolve';
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 20px;
 }
 
 tr {
-    text-align: left;
+  text-align: left;
 }
 
 .url {
-    min-width: 150px;
+  min-width: 150px;
 }
 
 .descr {
-    width: 90%;
+  width: 90%;
+}
+
+.descrInput {
+  width: 100%;
+  max-width: 45ch;
 }
 
 .cat {
-    min-width: 130px;
+  min-width: 130px;
+}
+
+.tags {
+  min-width: 250px;
+}
+
+.tags ul {
+  padding: 0 0 0 1em;
+}
+
+.tags__edit {
+  display: grid;
+  grid-template-rows: repeat(6, max-content);
+  grid-auto-flow: column;
+  gap: 1ch;
+  min-width: 60rem;
+}
+
+/* used to hide the checkboxes */
+.hide {
+  display: none !important;
 }
 
 label:not('.filters') {
-    display: block;
-    font-weight: bold;
+  display: block;
+  font-weight: bold;
 }
 
 .filters label {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 #honeypot {
-    display: none;
+  display: none;
 }
 
 #filters {
-    width: 50%;
-    margin-bottom: 10px;
+  width: 50%;
+  margin-bottom: 10px;
 }
 
 .flex {
-    display: flex;
+  display: flex;
 }
 
 
 input:not(input[type=checkbox]) {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 input[type=checkbox] {
-    display: inline;
+  display: inline;
 }
 
 #dupe {
-    color: red;
-    font-weight: bold;
-    display: none;
+  color: red;
+  font-weight: bold;
+  display: none;
 }
 
 [data-attr="fun"] {
-    color: rgb(240, 155, 98);
+  color: rgb(240, 155, 98);
 }
 
 [data-attr="serious"] {
-    color: rgb(248, 94, 94);
+  color: rgb(248, 94, 94);
 }
 
 [data-attr="useful"] {
-    color: rgb(107, 107, 248);
+  color: rgb(107, 107, 248);
 }
 
 [data-attr="healing"] {
-    color: rgb(131, 228, 131);
+  color: rgb(131, 228, 131);
 }
 
 
 [data-attr="social"] {
-    color: rgb(238, 90, 213);
+  color: rgb(238, 90, 213);
 }
 
 [data-attr="personal"] {
-    color: rgb(170, 115, 216);
+  color: rgb(170, 115, 216);
 }
 
 nav ul {
-    list-style-type: none;
-    background-color: var(--accent);
-    margin-top: 0;
-    padding: 10px;
+  list-style-type: none;
+  background-color: var(--accent);
+  margin-top: 0;
+  padding: 10px;
 
 }
 
 nav ul li {
-    display: inline;
+  display: inline;
 }
 
 nav ul li a {
-    color: white;
-    font-weight: bold;
-    padding-right: 40px;
-    text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding-right: 40px;
+  text-decoration: none;
 }
 
 details {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 summary {
-    list-style-type: none;
-    color: var(--accent2);
-    font-weight: bold;
-    margin-bottom: 10px;
+  list-style-type: none;
+  color: var(--accent2);
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .filterButton {
-    background-color: var(--accent);
-    padding-left: 10px;
-    font-weight: bold;
-    max-width: 150px;
-    margin-bottom: 10px;
-    padding: 5px;
+  background-color: var(--accent);
+  padding-left: 10px;
+  font-weight: bold;
+  max-width: 150px;
+  margin-bottom: 10px;
+  padding: 5px;
 
 }
 
 .small {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 #search {
-    max-width: 50%;
-    justify-content: flex-end;
+  max-width: 50%;
+  justify-content: flex-end;
 }
 
 #search label {
-    font-weight: bold;
-    color: var(--accent2);
+  font-weight: bold;
+  color: var(--accent2);
 }
 
 .filterSearch {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 mark {
-    padding: 5px;
-    background-color: rgb(243, 243, 136);
+  padding: 5px;
+  background-color: rgb(243, 243, 136);
 }
