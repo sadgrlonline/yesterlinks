@@ -142,9 +142,14 @@ tr {
 .tags__edit {
   display: grid;
   grid-template-rows: repeat(6, max-content);
-  grid-auto-flow: column;
+  /* grid-auto-flow: column; */
   gap: 1ch;
-  min-width: 60rem;
+  width: 200px;
+}
+
+.tags__edit>div>label {
+  display: inline;
+  font-weight: normal;
 }
 
 /* used to hide the checkboxes */
@@ -276,4 +281,48 @@ summary {
 mark {
   padding: 5px;
   background-color: rgb(243, 243, 136);
+}
+
+.myTags {
+  background-color: var(--accent2);
+  color: black;
+  padding: 3px;
+}
+
+.itemTags {
+  margin-top: 10px;
+}
+
+.tagFilter {
+  background-color: var(--accent);
+  padding: 5px;
+  display: none;
+}
+
+#currentTag {
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  tr {
+    height: auto;
+  }
+
+  thead {
+    display: none;
+  }
+
+  .surf {
+    display: none;
+  }
 }
