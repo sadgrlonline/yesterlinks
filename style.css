@@ -303,6 +303,11 @@ mark {
   font-weight: bold;
 }
 
+.urlAdmin {
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
 @media only screen and (max-width: 600px) {
 
   table,

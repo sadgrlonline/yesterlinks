@@ -17,7 +17,7 @@
           <tr>
             <tr>
               <th class="title">Title</th>
-              <th class="url title">URL</th>
+              <th class="urlAdmin title">URL</th>
               <th class="descr">Description</th>
               <th class="cat title">Category</th>
               <th class="cat title">Tags</th>
@@ -74,7 +74,7 @@
               } else {
                 echo $title;
               } ?></td>
-            <td class="url"><a href="<?php echo $url; ?>" target="_blank"><?php echo $url; ?></td>
+            <td class="urlAdmin"><a href="<?php echo $url; ?>" target="_blank"><?php echo $url; ?></td>
             <td class="descr"><?php if ($descr === '') {
                 echo "No description added.";
               } else {
@@ -116,7 +116,7 @@
     </div>
     <style>
     .container {
-      max-width:70%;
+      max-width:100%;
     }
 
     /* Now we can horizontally scroll the table, but the nav will stay in place! */
