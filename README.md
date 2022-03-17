@@ -8,6 +8,13 @@ It's currently being designed and written with PHP/SQL and Javascript.
 
 If you want to contribute to this project, please go ahead! If you're not tech-savvy I'll be including a description of how it works, and welcome all ideas.
 
+# New Features
+- Category checkbox filter
+- Search filter
+- Tagging system (thank you @amethystcube !!!!)
+- JSON file creation when website is changed
+- 'Surf' bookmarket link added (drag it to your bookmarks bar and click to surf! the file it references updates the db accordingly)
+
 # Goals
 
 The goal of this project is to create a database of links to cool or interesting lesser-known websites. It is meant to encourage people to "bloomscroll" - the opposite of doomscrolling. 
@@ -23,21 +30,16 @@ Currently there are 3 pages:
 - Submit (public, anti-bot) /submit-a-link.html
 - Admin (requires password, can edit/delete/approve entries) /admin/
 
+
 # The Database
 
 The database is the back-end which stores the data. Currently, the database exists of five columns:
 
-| id | title | url | description | category |
+| id | title | url | descr | category | pending
 
 # How to Contribute
 
 Don't know how to code? No problem! We are looking for all sorts of assistance here. If you play around with the demo and you have some feedback, please reach out! You can open an Issue on here, drop by the Discord server, or email me at sadgrl@riseup.net
-
-Here are some ideas of what I need assistance with:
-- I would love to create a relational database with a fully featured tagging system but I'm afraid this is beyond my particular skills right now. Even if you don't have time to build one, I greatly appreciate any offers for help with figuring out how to do this!
-- New category ideas? 
-- Some way to encourage a better user experience 'surfing' through webpages. Either that, or a way to programmatically determine whether a link in the list has 1) CORS enabled and/or 2) is http:// only so as to "filter" the iframe-friendly videos for a 'surf' feature.
-
 
 # How to Clone & Make a Copy
 
@@ -46,7 +48,6 @@ Detailed instructions coming soon!
 # To Do List
 - Add category descriptions
 - Create authentication (user/admin accounts)
-- Set up approval system.
 - Figure out how to do a public ranking/comment system?
 - Test on mobile
 - Update demo
