@@ -46,8 +46,5 @@ Don't know how to code? No problem! We are looking for all sorts of assistance h
 Detailed instructions coming soon!
 
 # To Do List
-- Add category descriptions
 - Create authentication (user/admin accounts)
 - Figure out how to do a public ranking/comment system?
-- Test on mobile
-- Update demo
