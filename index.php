@@ -48,29 +48,30 @@
               </summary>
               <div class="filters">
                 <label for="fun">Fun</label>
-                <input type="checkbox" id="fun" name="fun" rel="fun" value="fun" checked><br>
+                <input type="checkbox" id="fun" name="fun" rel="fun" value="fun"><br>
                 <label for="healing">Healing</label>
-                <input type="checkbox" id="healing" name="healing" rel="healing" value="healing" checked><br>
+                <input type="checkbox" id="healing" name="healing" rel="healing" value="healing"><br>
                 <label for="serious">Serious</label>
-                <input type="checkbox" id="serious" name="serious" rel="serious" value="serious" checked><br>
+                <input type="checkbox" id="serious" name="serious" rel="serious" value="serious"><br>
                 <label for="useful">Useful</label>
-                <input type="checkbox" id="useful" name="useful" rel="useful" value="useful" checked><br>
+                <input type="checkbox" id="useful" name="useful" rel="useful" value="useful"><br>
                 <label for="social">Social</label>
-                <input type="checkbox" id="social" name="social" rel="social" value="social" checked><br>
+                <input type="checkbox" id="social" name="social" rel="social" value="social"><br>
                 <label for="social">Personal</label>
-                <input type="checkbox" id="personal" name="personal" rel="personal" value="personal" checked><br>
+                <input type="checkbox" id="personal" name="personal" rel="personal" value="personal"><br>
               </div>
             </details>
           </div>
           <div id="search"><label>Search: </label><input type="text" id="searchInput">
           </div>
+          
         </div>
+        <p class="tagFilter">You are currently filtering by the <span id="currentTag"></span> tag. <a href="#" id="showAll">Show all</a></p>
         <table id="directory">
           <thead>
             <th class="url title">Title <i class="fa fa-sort fa-1x"></i></th>
             <th class="descr">Description <i class="fa fa-sort fa-1x"></i></th>
             <th class="cat title">Category <i class="fa fa-sort fa-1x"></i></th>
-            <th class="tags">Tags <i class="fa fa-sort fa-1x"></i></th>
           </thead>
 
           <tbody>
@@ -99,11 +100,13 @@
 
               $tags_query = "SELECT tag_id, tags.name FROM taglist JOIN tags ON taglist.tag_id = tags.id WHERE site_id =" . $row['id'] . " ORDER BY tags.name ASC";
               $tags_result = mysqli_query($con, $tags_query);
+              
 
               $tag_html = "";
 
-              while ($single_tag = mysqli_fetch_assoc($tags_result)) {
-                $tag_html .= "<li data-tag-id=" . $single_tag['tag_id'] . ">" . $single_tag['name'] . "</li>";
+              while ($single_tag = mysqli_fetch_assoc($tags_result)) {    
+                $tag_html .= "<a href='#' class='myTags' data-tag-id=" . $single_tag['tag_id'] . ">" . $single_tag['name'] . "</a> ";
+              
               } ?>
 
               <tr class="<?php echo $cat; ?>" id="<?php echo $id; ?>">
@@ -120,14 +123,21 @@
                   } else {
                     echo strtolower($descr);
                   } ?>
-                  <td class="cat" data-attr="<?php echo $cat; ?>"><?php echo $cat; ?></td>
-                  <td class="tags">
-                    <ul>
-                      <?php if (empty($tag_html) === false) {
+                  
+                      <?php 
+                      echo '<div class="itemTags">';
+                      
+                      if (empty($tag_html) === false) {
+                        echo '<strong>Tags: </strong>';
                         echo $tag_html;
-                      } ?>
-                    </ul>
+                        }
+                      
+                      echo '</div>';
+                      
+                      ?>
+                       
                   </td>
+                  <td class="cat" data-attr="<?php echo $cat; ?>"><?php echo $cat; ?></td>
                 </tr>
               <?php } // end while loop for sites ?>
             </tbody>
@@ -151,8 +161,11 @@
   $(function() {
     $('#searchInput').val('');
     $("#directory").tablesorter();
+    // this unchecks everything when refreshed
+    $('input[type="checkbox"]').each(function(){
+  	  $(this).prop('checked', false);
+    });
   });
-
 
   $('#surf').on("click", function(e) {
     e.preventDefault();
@@ -178,39 +191,71 @@
     }
     return urlArr;
   }
+
+
   var firstClick = 0;
-  $('input[type=checkbox]').on("change", function() {
-    if (firstClick !== 1) {
-      //$('tbody').css('display', 'none');
-      firstClick = 1;
+  var selectedOptions = [];
+  var inputLength = $('input[type="checkbox"').length;
+$('input[type=checkbox]').on("change", function() {
 
+  // if it is the first click, we hide all of the rows by default, then show one by one...
+  if (firstClick === 0) {
+    $('tr').each(function(index) {
+      $(this).hide();
+    });
+    console.log(firstClick);
+  }
+  // once that runs once, firstClick becomes 1 so it doesn't run again
+  firstClick = 1;
 
-      if ($(this).prop("checked") == true) {
-        console.log('checked');
-        var cat = $(this).val();
-        console.log($(this).val());
-        $('.' + cat).css("display", "table-row");
-      } else if ($(this).prop("checked") == false) {
-        console.log('unchecked');
-        var removeCat = $(this).val();
-        $('.' + removeCat).css("display", "none");
-      }
-      // if not first click...
-    } else {
-      //$(this).css("display", "none");
-      if ($(this).prop("checked") == true) {
-        console.log('checked');
-        var cat = $(this).val();
-        console.log($(this).val());
-        $('.' + cat).css("display", "table-row");
-      } else if ($(this).prop("checked") == false) {
-        console.log('unchecked');
-        var removeCat = $(this).val();
-        $('.' + removeCat).css("display", "none");
-      }
-    }
+  var selected = $(this);
 
-  });
+  // if a checkbox is checked...
+  if ($(this).prop("checked") == true) {
+    // add value to array
+    selectedOptions.push($(this).val());
+    //console.log('checked');
+
+     var checked = $(this).val()
+
+     // loop through each tr element
+      $('tr').each(function(index) {
+        // grab the matching text from the cat cell
+        catText = $(this).children('.cat').text();
+        // if the category text matches the text in the table cell
+          if (catText === checked) {
+            console.log('matched');
+            // show it!
+            $(this).show();
+        }
+      });
+   } else {
+     if ($('input[type="checkbox"').length === inputLength) {
+      $('tr').each(function(index) {
+        $(this).show();
+        firstClick = 0;
+    });
+     }
+     console.log('unchecked');
+     var index = selectedOptions.indexOf(selected);
+     selectedOptions.splice(index, 1);
+     var unchecked = $(this).val()
+     $('tr').each(function(index) {
+        // grab the matching text from the cat cell
+        catText = $(this).children('.cat').text();
+        // if the category text matches the text in the table cell
+          if (catText === unchecked) {
+            console.log('matched');
+            // show it!
+            $(this).hide();
+        }
+
+      });
+
+   }
+  console.log(selectedOptions);
+ });
+ 
 
   $('#searchInput').on('keyup', function(e) {
     // value of text field
@@ -248,5 +293,32 @@
       }
     });
   });
+
+  $('.myTags').on("click", function() {
+    $('.tagFilter').css("display", "block");
+    console.log($(this).data("tag-id"));
+    var tagID = $(this).data("tag-id");
+
+    $('tr').each(function(index) {
+      if ($(this).children('.desc').children('.itemTags').children('.myTags').data("tag-id") == tagID) {
+        console.log('matched tag!');
+        //$(this).css('color', 'red');
+        // get name of tag
+        var myTags = $(this).children('.desc').children('.itemTags').children('.myTags');
+        var selectedTag = document.querySelectorAll("[data-tag-id='" + tagID + "']")[0].innerText;
+        $('#currentTag').html(selectedTag);
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    })
+  })
+
+  $('#showAll').on("click", function() {
+    $('tr').each(function(index) {
+      $('.tagFilter').css("display", "none");
+      $(this).show();
+    });
+  })
 
 </script>
