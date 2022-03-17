@@ -118,12 +118,13 @@
                   } ?>
                 </td>
                 <td class="desc">
+                  <div class="desc">
                   <?php if ($descr === '') {
                     echo "No description added.";
                   } else {
                     echo strtolower($descr);
                   } ?>
-                  
+                  </div>
                       <?php 
                       echo '<div class="itemTags">';
                       
@@ -195,21 +196,30 @@
 
   var firstClick = 0;
   var selectedOptions = [];
-  var inputLength = $('input[type="checkbox"').length;
-$('input[type=checkbox]').on("change", function() {
+
+  $('input[type=checkbox]').on("change", function() {
+    var inputLength = $('input[type="checkbox"]').length;
 
   // if it is the first click, we hide all of the rows by default, then show one by one...
   if (firstClick === 0) {
     $('tr').each(function(index) {
       $(this).hide();
     });
-    console.log(firstClick);
   }
+
   // once that runs once, firstClick becomes 1 so it doesn't run again
   firstClick = 1;
 
-  var selected = $(this);
+    // checks - if nothing is checked, show ALL
+     if ($('.filters').find('input:checked').length === 0) {
+       console.log('checkboxes full');
+      $('tr').each(function(index) {
+        $(this).show();
+        firstClick = 0;
+      });
+    }
 
+  var selected = $(this);
   // if a checkbox is checked...
   if ($(this).prop("checked") == true) {
     // add value to array
@@ -230,12 +240,6 @@ $('input[type=checkbox]').on("change", function() {
         }
       });
    } else {
-     if ($('input[type="checkbox"').length === inputLength) {
-      $('tr').each(function(index) {
-        $(this).show();
-        firstClick = 0;
-    });
-     }
      console.log('unchecked');
      var index = selectedOptions.indexOf(selected);
      selectedOptions.splice(index, 1);
@@ -280,12 +284,11 @@ $('input[type=checkbox]').on("change", function() {
 
       if (!($table.find('td').text().search(patt) >= 0)) {
         $table.not('th').hide();
-
       }
 
       if (($table.find('td').text().search(patt) >= 0)) {
         $(this).show();
-        var td = $(this).children('td.descr');
+        var td = $(this).children('td.desc').children('div.desc');
         var matchedRow = td.text();
         var newMarkup = matchedRow.replace(value, '<mark>' + value + '</mark>');
         td.html(newMarkup);
