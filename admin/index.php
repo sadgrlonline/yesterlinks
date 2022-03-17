@@ -139,18 +139,18 @@ $(function() {
 
 $('td').on("click", ".edit", function(e) {
   e.preventDefault();
-  var url = $(this).parent('td').siblings('.url').text();
+  var url = $(this).parent('td').siblings('.urlAdmin').text();
   var cat = $(this).parent('td').parent('.row').children('.cat').text();
   var title = $(this).parent('td').parent('.row').children('.title').text();
   var descr = $(this).parent('td').parent('.row').children('.descr').text();
   var id = $(this).attr("id");
 
 
-  $(this).parent('td').parent('.row').children('.url').append('<input type="text" class="titleInput"></input>');
+  $(this).parent('td').parent('.row').children('.urlAdmin').append('<input type="text" class="titleInput"></input>');
 
   console.log(id);
   $(this).parent('td').parent('.row').children('.title').html('<input type="text" class="titleInput" value="' + title + '"></input>');
-  $(this).parent('td').parent('.row').children('.url').html('<input type="text" class="urlInput" value="' + url + '"></input>');
+  $(this).parent('td').parent('.row').children('.urlAdmin').html('<input type="text" class="urlInput" value="' + url + '"></input>');
   $(this).parent('td').parent('.row').children('.descr').html('<textarea rows="15" class="descrInput">' + descr + '</textarea>');
   $(this).parent('td').parent('.row').children('.cat').html('<input type="text" class="catInput" value="' + cat + '"></input>');
   $(this).parent('td').siblings('.tags').children('ul').addClass('hide');
@@ -162,7 +162,7 @@ $('td').on("click", ".edit", function(e) {
   $('td').on("click", ".save", function(e) {
     e.preventDefault();
     var id = $(this).attr('id');
-    var url = $(this).parent('td').siblings('.url').children('.urlInput').val();
+    var url = $(this).parent('td').siblings('.urlAdmin').children('.urlInput').val();
     var cat = $(this).parent('td').parent('.row').children('.cat').children('.catInput').val();
     var title = $(this).parent('td').parent('.row').children('.title').children('.titleInput').val();
     var descr = $(this).parent('td').parent('.row').children('.descr').children('.descrInput').val();
@@ -179,7 +179,7 @@ $('td').on("click", ".edit", function(e) {
       tagList.append(`<li>${$(tags[i]).siblings('label').text()}</li>`); // Add this tag value to the list in the tags column
     }
 
-    $(this).parent('td').siblings('.url').html('<a href="' + url + '">' + url + '</a>');
+    $(this).parent('td').siblings('.urlAdmin').html('<a href="' + url + '">' + url + '</a>');
     $(this).parent('td').siblings('.cat').text(cat);
     $(this).parent('td').siblings('.title').text(title);
     $(this).parent('td').siblings('.descr').text(descr);
