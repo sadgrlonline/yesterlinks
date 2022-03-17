@@ -203,7 +203,7 @@
   // if it is the first click, we hide all of the rows by default, then show one by one...
   if (firstClick === 0) {
     $('tr').each(function(index) {
-      $(this).hide();
+      $(this).not('.tablesorter-headerRow').hide();
     });
   }
 
@@ -251,7 +251,7 @@
           if (catText === unchecked) {
             console.log('matched');
             // show it!
-            $(this).hide();
+            $(this).not('.tablesorter-headerRow').hide();
         }
 
       });
@@ -283,7 +283,7 @@
       var $table = $(this);
 
       if (!($table.find('td').text().search(patt) >= 0)) {
-        $table.not('th').hide();
+        $table.not('.tablesorter-headerRow').hide();
       }
 
       if (($table.find('td').text().search(patt) >= 0)) {
