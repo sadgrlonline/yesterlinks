@@ -10,6 +10,8 @@
   <div class="container">
     <?php include 'navigation.php' ?>
     <h1>Yesterlinks Admin</h1>
+    <div id="search"><label>Search: </label><input type="text" id="searchInput">
+          </div>
     <div class="table-wrapper">
     <table id="directory">
       <div class="row">
@@ -116,12 +118,24 @@
     </div>
     <style>
     .container {
-      max-width:100%;
+      max-width:1200px;
     }
 
     /* Now we can horizontally scroll the table, but the nav will stay in place! */
     .table-wrapper {
       overflow: auto;
+    }
+
+    .descr {
+      width:200px !important;
+      max-width:200px !important;
+    }
+    .tags {
+      min-width:120px;
+    }
+    .title {
+      width:150px;
+      max-width:150px;
     }
   </style>
 </body>
@@ -139,6 +153,7 @@ $(function() {
 
 $('td').on("click", ".edit", function(e) {
   e.preventDefault();
+  
   var url = $(this).parent('td').siblings('.urlAdmin').text();
   var cat = $(this).parent('td').parent('.row').children('.cat').text();
   var title = $(this).parent('td').parent('.row').children('.title').text();
@@ -222,4 +237,40 @@ $('.del').on("click", function(e) {
   });
 }
 })
+
+$('#searchInput').on('keyup', function(e) {
+    // value of text field
+    var value = $(this).val();
+    console.log(e.keyCode);
+
+    // assigns the pattern we're searching for
+    var patt = new RegExp(value, "i");
+    // in the #directory table, find each tr
+    $('#directory').find('tr').each(function() {
+      if(value.length === 0) {
+        // if search box is empty
+        // loop through rows and make highlight 'invisible'.
+        console.log('remove Mark');
+        //$(this).children('td.descr').children(mark))
+        $('mark').css('background-color', 'transparent');
+        $('mark').css('padding', '0');
+
+      }
+
+      var $table = $(this);
+
+      if (!($table.find('td').text().search(patt) >= 0)) {
+        $table.not('.tablesorter-headerRow').hide();
+      }
+
+      if (($table.find('td').text().search(patt) >= 0)) {
+        $(this).show();
+        var td = $(this).children('td.desc').children('div.desc');
+        var matchedRow = td.text();
+        var newMarkup = matchedRow.replace(value, '<mark>' + value + '</mark>');
+        td.html(newMarkup);
+
+      }
+    });
+  });
 </script>
