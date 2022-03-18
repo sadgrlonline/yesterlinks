@@ -69,9 +69,11 @@ tbody tr:nth-child(odd) {
   background-color: #494949;
 }
 
-tr a {
+td.url a {
   color: var(--accent2);
   font-weight: bold;
+  font-size: 22px;
+  font-family: 'Digivolve';
   text-decoration: none;
 }
 
@@ -286,7 +288,11 @@ mark {
 .myTags {
   background-color: var(--accent2);
   color: black;
-  padding: 3px;
+  padding: 4px;
+}
+
+.myTags {
+  text-decoration: none;
 }
 
 .itemTags {
