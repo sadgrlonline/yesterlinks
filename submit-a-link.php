@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script data-goatcounter="https://yesterweb.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script
 </head>
 <?php
     include 'config.php';
@@ -22,7 +23,10 @@
             <div class="wrapper">
                 <div class="contain">
                     <h1>Submit a Link</h1>
-                    <p class="intro">Know a website that's full of wonder and mystery?</p>
+                    <p class="intro">
+                        <p>Know a website that's full of wonder and mystery?</p>
+                        <p><strong>We do not accept <strong>commercial links</strong> (shops, paid products, etc.) or referral links.
+                        </p>
                     <form method="POST" action="submit.php">
                         <label>Webpage Title</label> <input type="text" name="titleInput" id="titleInput" required><br>
                         <label>Webpage URL</label> <input type="url" name="urlInput" id="urlInput" required><br><span id="dupe">This item is a duplicate.</span>
