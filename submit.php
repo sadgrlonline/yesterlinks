@@ -13,6 +13,7 @@ if (isset($_POST['cat'])) {
     'db'  => array(), // store the tags from the database
     'new' => json_decode($_POST['tags']), // store the tags from the $_POST
   );
+  
 
   $stmt = $con->prepare("UPDATE websites SET title = ?, url = ?, descr = ?, category = ? WHERE id = ?");
   $stmt->bind_param("sssss", $title, $url, $descr, $cat, $id);
@@ -29,6 +30,8 @@ if (isset($_POST['cat'])) {
   while ($tag = mysqli_fetch_assoc($qry_tags)) {
     array_push($tags['db'], $tag['tag_id']);
   }
+  
+
 
   $db_length = count($tags['db']);
   $new_length = count($tags['new']);
@@ -112,9 +115,15 @@ if (isset($_POST['del'])) {
 // handles submissions
 if (isset($_POST['submit'])) {
   $honeypot = $_POST['honeypot'];
+  $botField = $_POST['botField'];
   if(!empty($honeypot)){
-    return; //you may add code here to echo an error etc.
-  }else{
+   echo "honeypot filled";
+    return; 
+  } else if ($botField !== "website") {
+                echo "did not pass bot field";
+                return;
+  } else {
+echo "success";
     $title = $_POST['titleInput'];
     $url = $_POST['urlInput'];
     $descr = $_POST['descrInput'];
