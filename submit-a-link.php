@@ -47,6 +47,7 @@
                         <br><br>
 
                         <input type="text" id="honeypot" name="honeypot">
+                        <label>Type the word <u>website</u></label><input type="text" id="botField" name="botField"><br><br>
                         <input type="submit" id="submit" name="submit" value="Submit">
                     </form>
                 </div>
@@ -83,9 +84,24 @@ console.log('test');
     var sitesArr = <?php echo json_encode($websites); ?>;
     var urlInput = document.getElementById('urlInput');
     var dupe = document.getElementById('dupe');
+
+    var botField = document.getElementById('botField');
     var submitBtn = document.getElementById('submit');
 
+    submitBtn.disabled = true;
+
+   
+
     urlInput.addEventListener("change", checkIfDupe);
+    botField.addEventListener("keyup", checkIfBot);
+
+
+function checkIfBot() {
+  var value = botField.value;
+     if (value == "website") {
+      submitBtn.disabled = false;
+    }
+}
 
 
     function checkIfDupe() {
