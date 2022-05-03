@@ -1,15 +1,32 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (empty($_SESSION['username'])) {
+  header("location: ../login");
+} ?>
 <!DOCTYPE html>
 <html>
 <head>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="../scripts/jquery.tablesorter.min.js"></script>
-  <link rel="stylesheet" href="../style.css">
+  <script type="text/javascript" src="../assets/js/jquery.tablesorter.min.js"></script>
+  <link rel="stylesheet" href="../assets/css/style.css?v=2022-04-30">
+  <link rel="stylesheet" href="../assets/css/admin-styles.css?v=2022-04-30">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <title>Yesterlinks: Admin</title>
 </head>
 
-<body>
+<body class="admin">
+  <?php
+  /* Display this banner if this instance of the repo is not the main one */
+  if ($_SERVER['HTTP_HOST'] !== "links.yesterweb.org") { ?>
+  <p class="banner">You are editing a copy of <a href="https://github.com/sadgrlonline/yesterlinks/">sadgrlonline's repository</a>. The most updated version of this project lives at <a href="https://links.yesterweb.org">links.yesterweb.org</a>.</p>
+  <?php } ?>
   <div class="container">
-    <?php include 'navigation.php' ?>
-    <h1>Yesterlinks Admin</h1>
+    <?php include '../navigation.php' ?>
+    <h1>Yesterlinks: Admin</h1>
+    <p>hi <?php if (isset($_SESSION['username'])) { echo $_SESSION['username']; } ?>!</p>
     <div id="search"><label>Search: </label><input type="text" id="searchInput">
           </div>
     <div class="table-wrapper">
@@ -18,15 +35,14 @@
         <thead>
           <tr>
             <tr>
-              <th class="title">Title</th>
-              <th class="urlAdmin title">URL</th>
-              <th class="descr">Description</th>
-              <th class="cat title">Category</th>
-              <th class="cat title">Tags</th>
-              <th class="cat title" colspan="2">Options</th>
+              <th class="title">Title <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+              <th class="urlAdmin title">URL <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+              <th class="descr">Description <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+              <th class="cat title">Category <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+              <th class="cat title">Tags <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+              <th class="cat title" colspan="3">Options</th>
             </tr>
           </tr>
-
         </thead>
       </div>
       <tbody>
@@ -58,6 +74,7 @@
           $descr = $row['descr'];
           $url = $row['url'];
           $cat = $row['category'];
+          $is_pending = $row['pending'];
 
           $tags_query = "SELECT tag_id, tags.name FROM taglist JOIN tags ON taglist.tag_id = tags.id WHERE site_id =" . $row['id'] . " ORDER BY tags.name ASC";
           $tags_result = mysqli_query($con, $tags_query);
@@ -90,7 +107,7 @@
                   } ?>
                 </ul>
                 <fieldset class="tags__edit hide">
-                  <legend>Tag List (Toggle checkbox to add/remove)</legend>
+                  <legend>Tag List</legend>
                   <?php
                   /* loop for displaying the checkboxes */
                   $get_all_tags = mysqli_query($con, "SELECT * FROM tags ORDER BY tags.name ASC"); // query all tags for displaying the checkboxes
@@ -108,169 +125,46 @@
                   <?php } ?>
                 </fieldset>
               </td>
-              <td><a href="#" class="edit" id="<?php echo $id; ?>">edit</a></td>
-              <td><a href="#" class="del" id="<?php echo $id; ?>">x</a></td>
+              <td class="text-align-center">
+                <button type="button" class="edit" data-id="<?php echo $id; ?>" aria-pressed="false">edit</button>
+                <button type="button" class="save" data-id="<?php echo $id; ?>">save</button>
+              </td>
+              <td class="text-align-center"><button type="button" class="del" data-id="<?php echo $id; ?>">remove</button></td>
+              <?php
+              /* If the website is pending */
+              if ($is_pending === 1) {
+                $status = "pending";
+                $is_pressed = "false";
+              }
+
+              /* If the website is approved */
+              if ($is_pending === 0) {
+                $status = "approved";
+                $is_pressed = "true";
+              }
+              ?>
+              <td class="approve text-align-center">
+                <label for="approval-<?php echo $id; ?>">Approved</label>
+                <input id="approval-<?php echo $id; ?>" class="approve" type="checkbox" data-id="<?php echo $id; ?>" value="<?php
+              if ($is_pending === 1) { echo 0; }
+              if ($is_pending === 0) { echo 1; }
+              ?>"
+              <?php
+              if ($is_pending === 0) { echo "checked"; }
+              ?>>
+            </td>
             </tr>
           <?php } // end while loop for sites ?>
       </tbody>
     </table>
   </div>
     </div>
-    <style>
-    .container {
-      max-width:1200px;
-    }
-
-    /* Now we can horizontally scroll the table, but the nav will stay in place! */
-    .table-wrapper {
-      overflow: auto;
-    }
-
-    .descr {
-      width:200px !important;
-      max-width:200px !important;
-    }
-    .tags {
-      min-width:120px;
-    }
-    .title {
-      width:150px;
-      max-width:150px;
-    }
-  </style>
+    <script type="text/javascript">
+    /* We will use these variables in the linked `scripts.js` file */
+    var idArr = <?php echo json_encode($idarray); ?>;
+    var urlArr = <?php echo json_encode($urlarray); ?>;
+    var catArr = <?php echo json_encode($catarray); ?>;
+    </script>
+    <script src="../assets/js/admin-scripts.js?v=2022-04-30" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
-<script>
-var idArr = <?php echo json_encode($idarray); ?>;
-var urlArr = <?php echo json_encode($urlarray); ?>;
-var catArr = <?php echo json_encode($catarray); ?>;
-
-var random;
-
-$(function() {
-  $("#directory").tablesorter();
-});
-
-$('td').on("click", ".edit", function(e) {
-  e.preventDefault();
-  
-  var url = $(this).parent('td').siblings('.urlAdmin').text();
-  var cat = $(this).parent('td').parent('.row').children('.cat').text();
-  var title = $(this).parent('td').parent('.row').children('.title').text();
-  var descr = $(this).parent('td').parent('.row').children('.descr').text();
-  var id = $(this).attr("id");
-
-
-  $(this).parent('td').parent('.row').children('.urlAdmin').append('<input type="text" class="titleInput"></input>');
-
-  console.log(id);
-  $(this).parent('td').parent('.row').children('.title').html('<input type="text" class="titleInput" value="' + title + '"></input>');
-  $(this).parent('td').parent('.row').children('.urlAdmin').html('<input type="text" class="urlInput" value="' + url + '"></input>');
-  $(this).parent('td').parent('.row').children('.descr').html('<textarea rows="15" class="descrInput">' + descr + '</textarea>');
-  $(this).parent('td').parent('.row').children('.cat').html('<input type="text" class="catInput" value="' + cat + '"></input>');
-  $(this).parent('td').siblings('.tags').children('ul').addClass('hide');
-  $(this).parent('td').parent('.row').children('.tags').children('.tags__edit').removeClass('hide');
-  $(this).replaceWith('<a class="save" id="' + id + '" href="#">save</a>');
-
-
-
-  $('td').on("click", ".save", function(e) {
-    e.preventDefault();
-    var id = $(this).attr('id');
-    var url = $(this).parent('td').siblings('.urlAdmin').children('.urlInput').val();
-    var cat = $(this).parent('td').parent('.row').children('.cat').children('.catInput').val();
-    var title = $(this).parent('td').parent('.row').children('.title').children('.titleInput').val();
-    var descr = $(this).parent('td').parent('.row').children('.descr').children('.descrInput').val();
-    var tags = $(this).parent('td').parent('.row').children('.tags').find('input[type="checkbox"]:checked');
-    var tagList = $(this).parent('td').parent('.row').children('.tags').children('ul');
-
-    var chosenTagIDs = [];
-    tagList.empty(); // clear the list of tags on the page
-
-    /* Loop through the chosen tags and make an array of their IDs to send to `submit.php` */
-    for (var i = 0; i < tags.length; i++) {
-      chosenTagIDs.push(tags[i].value);
-
-      tagList.append(`<li>${$(tags[i]).siblings('label').text()}</li>`); // Add this tag value to the list in the tags column
-    }
-
-    $(this).parent('td').siblings('.urlAdmin').html('<a href="' + url + '">' + url + '</a>');
-    $(this).parent('td').siblings('.cat').text(cat);
-    $(this).parent('td').siblings('.title').text(title);
-    $(this).parent('td').siblings('.descr').text(descr);
-    $(this).parent('td').siblings('.tags').children('ul').removeClass('hide');
-    $(this).parent('td').siblings('.tags').children('.tags__edit').addClass('hide');
-    $(this).replaceWith('<a class="edit" id="' + id + '"href="#">edit</a>')
-    console.log(id, title, url, descr, cat, tags);
-    $.ajax({
-      type: 'post',
-      data: {'id':id,
-      'title':title,
-      'url':url,
-      'descr':descr,
-      'cat':cat,
-      'tags': JSON.stringify(chosenTagIDs)
-    },
-    url: '../submit.php',
-    success: function(response) {
-      //location.reload();
-    }
-  });
-});
-});
-
-$('.del').on("click", function(e) {
-  e.preventDefault();
-  var id = $(this).attr('id');
-  var del = "del";
-  if (confirm("Are you sure you want to delete this entry?") == true) {
-    $(this).parent('td').parent('.row').remove();
-    $.ajax({
-      type: 'post',
-      data: {'id':id,
-      'del':del
-    },
-    url: '../submit.php',
-    success: function(response) {
-      //location.reload();
-    }
-  });
-}
-})
-
-$('#searchInput').on('keyup', function(e) {
-    // value of text field
-    var value = $(this).val();
-    console.log(e.keyCode);
-
-    // assigns the pattern we're searching for
-    var patt = new RegExp(value, "i");
-    // in the #directory table, find each tr
-    $('#directory').find('tr').each(function() {
-      if(value.length === 0) {
-        // if search box is empty
-        // loop through rows and make highlight 'invisible'.
-        console.log('remove Mark');
-        //$(this).children('td.descr').children(mark))
-        $('mark').css('background-color', 'transparent');
-        $('mark').css('padding', '0');
-
-      }
-
-      var $table = $(this);
-
-      if (!($table.find('td').text().search(patt) >= 0)) {
-        $table.not('.tablesorter-headerRow').hide();
-      }
-
-      if (($table.find('td').text().search(patt) >= 0)) {
-        $(this).show();
-        var td = $(this).children('td.desc').children('div.desc');
-        var matchedRow = td.text();
-        var newMarkup = matchedRow.replace(value, '<mark>' + value + '</mark>');
-        td.html(newMarkup);
-
-      }
-    });
-  });
-</script>

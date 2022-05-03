@@ -2,326 +2,208 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <title>Yesterlinks Directory</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="scripts/jquery.tablesorter.min.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="assets/js/jquery.tablesorter.min.js"></script>
+  <link rel="stylesheet" href="assets/css/style.css?v=2022-04-30">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-
+  <title>Yesterlinks</title>
 </head>
 <body>
-  <?php
+  <?php if ($_SERVER['HTTP_HOST'] !== "links.yesterweb.org") { ?>
+  <p class="banner">This is a copy of <a href="https://github.com/sadgrlonline/yesterlinks/">sadgrlonline's repository</a>. The most updated version of this project (with even more links!) lives at <a href="https://links.yesterweb.org">links.yesterweb.org</a>. Have fun!</p>
+<?php } ?>
+  <div class="container">
+<?php
   include "config.php";
+  include "submit.php";
 
   $sql = "SELECT COUNT(*) FROM websites WHERE pending = 0";
   $qry = mysqli_query($con, $sql);
   $totalCount = mysqli_fetch_assoc($qry)['COUNT(*)'];
+  $voter_id = hash('sha3-256', $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . "yw-links");
 
+  /* Remove expired votes */
+  remove_expired_votes($con, "$decay ago");
   ?>
 
-  <div class="container">
     <?php include 'navigation.php'; ?>
-    <div class="wrapper">
-      <div class="flex">
+      <section class="display-flex">
         <div>
           <h1>Yesterlinks</h1>
           <p>Remember when the internet felt exciting and mysterious?</p>
-          <p>Here are <strong><?php echo $totalCount ?></strong> links!</p>
+          <p>Here are <strong><?php echo $totalCount; ?></strong> links!</p>
           <details>
             <summary>What is this?</summary>
-            <p class="small">This is a user-curated directory of interesting off-the-beaten path websites. Use the checkboxes to filter by category, or click the table headings to sort columns alphabetically. Every time this page reloads, the order of websites are shuffled.</p>
-            <p class="small">You can use the "Surf" button to load a webpage at random, or add/drag this <a href="https://links.yesterweb.org/surf.html">Surf</a> link to your bookmarks bar and you can click it to surf a random page.</p>
+            <p>This is a user-curated directory of interesting off-the-beaten path websites. Use the checkboxes to filter by category, or click the table headings to sort by certain columns. Every time this page reloads, the order of websites are shuffled.</p>
+            <p>You can use the "Surf" button to load a webpage at random, or add/drag this <a href="surf.php">Surf</a> link to your bookmarks bar and you can click it to surf a random page.</p>
             <p>Want to contribute? Check out the <a href="https://github.com/sadgrlonline/yesterlinks" target="_blank">Github</a>!</p>
+            <hr>
+            <p>Recommendations will decay over time, and they disappear completely after <?php echo $decay; ?>.</p>
           </details>
         </div>
         <div class="surf">
-          <a href="#" id="surf" target="_blank">Random</a>
+          <a href="surf.php" id="surf" target="_blank" aria-label="Random site (opens in a new tab)">Random</a>
           <p>This will open a site at random in a new tab.</p>
-          <p>Or, you can drag this <a href="https://links.yesterweb.org/surf.html">Surf</a> link to your bookmark bar and click it for a random page.</p>
-
+          <p>You can even bookmark it for easy access!</p>
         </div>
-      </div>
-      <div class="flex filterSearch">
+      </section>
+      <main>
+      <div class="display-flex filter-search">
         <div id="filters">
           <details>
-            <summary class="filterButton">
+            <summary class="filter-button">
               <i class="fa fa-filter fa-1x"></i> <span class="intro">FILTER</a>
-              </summary>
+            </summary>
               <div class="filters">
-                <label for="fun">Fun</label>
-                <input type="checkbox" id="fun" name="fun" rel="fun" value="fun"><br>
-                <label for="healing">Healing</label>
-                <input type="checkbox" id="healing" name="healing" rel="healing" value="healing"><br>
-                <label for="serious">Serious</label>
-                <input type="checkbox" id="serious" name="serious" rel="serious" value="serious"><br>
-                <label for="useful">Useful</label>
-                <input type="checkbox" id="useful" name="useful" rel="useful" value="useful"><br>
-                <label for="social">Social</label>
-                <input type="checkbox" id="social" name="social" rel="social" value="social"><br>
-                <label for="social">Personal</label>
-                <input type="checkbox" id="personal" name="personal" rel="personal" value="personal"><br>
-              </div>
-            </details>
+                <div class="filter">
+                  <input type="checkbox" id="fun" value="fun">
+                  <label for="fun">Fun</label>
+                </div>
+                <div class="filter">
+                  <input type="checkbox" id="healing" value="healing">
+                  <label for="healing">Healing</label>
+                </div>
+                <div class="filter">
+                  <input type="checkbox" id="serious" value="serious">
+                  <label for="serious">Serious</label>
+                </div>
+                <div class="filter">
+                  <input type="checkbox" id="useful" value="useful">
+                  <label for="useful">Useful</label>
+                </div>
+                <div class="filter">
+                  <input type="checkbox" id="social" value="social">
+                  <label for="social">Social</label>
+                </div>
+                <div class="filter">
+                  <input type="checkbox" id="personal" value="personal">
+                  <label for="personal">Personal</label>
+                </div>
+              </details>
+            </div>
+            <div id="search">
+              <label for="search-input">Search: </label>
+              <input type="text" id="search-input">
+            </div>
           </div>
-          <div id="search"><label>Search: </label><input type="text" id="searchInput">
-          </div>
-          
-        </div>
-        <p class="tagFilter">You are currently filtering by the <span id="currentTag"></span> tag. <a href="#" id="showAll">Show all</a></p>
-        <table id="directory">
-          <thead>
-            <th class="url title">Title <i class="fa fa-sort fa-1x"></i></th>
-            <th class="descr">Description <i class="fa fa-sort fa-1x"></i></th>
-            <th class="cat title">Category <i class="fa fa-sort fa-1x"></i></th>
-          </thead>
+      <div class="display-flex justify-content-space-between">
+      <div class="order-added-sorting">
+        <button type="button" value="a">Sort by oldest</button>
+        <button type="button" value="d">Sort by most recent</button>
+      </div>
+      <div class="rank-sorting">
+        <button type="button" value="d">Show highest recommended</button>
+      </div>
+    </div>
+      <div class="table-wrapper">
+        <p class="tag-filter">You are currently filtering by the <b id="current-tag">[TAG_NAME]</b> tag. <button id="show-all">Show All</button></p>
+      <table id="directory">
+        <thead>
+          <th scope="col" class="url">Title <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+          <th scope="col" class="order-added">Order Added <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+          <th scope="col" class="descr">Description <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+          <th scope="col" class="cat">Category <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+          <th scope="col" class="votes sorter-digit">Community <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
+        </thead>
+        <tbody>
 
-          <tbody>
-
-            <?php
-
-            $stmt = $con->prepare("SELECT * FROM websites WHERE pending = 0 ORDER BY rand()");
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();
+          <?php
+          /* Get sites */
+          $stmt = $con->prepare("SELECT * FROM websites WHERE pending = 0 ORDER BY rand()");
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $stmt->close();
 
 
-            $idarray = [];
-            $urlarray = [];
-            $catarray = [];
+          $idarray = [];
+          $urlarray = [];
+          $catarray = [];
 
-            while ($row = $result->fetch_assoc()) {
-              $idarray[] = $row['id'];
-              $urlarray[] = $row['url'];
-              $catarray[] = $row['category'];
-              $id = $row['id'];
-              $title = $row['title'];
-              $descr = $row['descr'];
-              $url = $row['url'];
-              $cat = $row['category'];
+          while ($row = $result->fetch_assoc()) {
+            $idarray[] = $row['id'];
+            $urlarray[] = $row['url'];
+            $catarray[] = $row['category'];
+            $id = $row['id'];
+            $title = $row['title'];
+            $descr = $row['descr'];
+            $url = $row['url'];
+            $cat = $row['category'];
 
-              $tags_query = "SELECT tag_id, tags.name FROM taglist JOIN tags ON taglist.tag_id = tags.id WHERE site_id =" . $row['id'] . " ORDER BY tags.name ASC";
-              $tags_result = mysqli_query($con, $tags_query);
-              
+            /* Get tags */
+            $tags_query = "SELECT tag_id, tags.name FROM taglist JOIN tags ON taglist.tag_id = tags.id WHERE site_id =" . $row['id'] . " ORDER BY tags.name ASC";
+            $tags_result = mysqli_query($con, $tags_query);
 
-              $tag_html = "";
 
-              while ($single_tag = mysqli_fetch_assoc($tags_result)) {    
-                $tag_html .= "<a href='#' class='myTags' data-tag-id=" . $single_tag['tag_id'] . ">" . $single_tag['name'] . "</a> ";
-              
-              } ?>
+            $tag_html = "";
 
-              <tr class="<?php echo $cat; ?>" id="<?php echo $id; ?>">
-                <td class="url"><a href="<?php echo $url; ?>" target="_blank">
-                  <?php if ($title === null) {
-                    echo "Untitled";
-                  } else {
-                    echo $title;
-                  } ?>
-                </td>
-                <td class="desc">
-                  <div class="desc">
+            while ($single_tag = mysqli_fetch_assoc($tags_result)) {
+              $tag_html .= "<button data-tag-id=" . $single_tag['tag_id'] . ">" . $single_tag['name'] . "</button> ";
+            }
+
+            /* Get vote count */
+            $votes = get_vote_count($con, $id);
+
+            /* Get this visitor's' votes */
+            $votes_query = "SELECT * FROM votelist WHERE voter_id = '$voter_id' AND site_id =" .  $row['id'];
+            $votes_result = mysqli_query($con, $votes_query); // we'll use this later to set the state of the voting buttons
+            ?>
+
+            <tr class="<?php echo $cat; ?>" id="<?php echo $id; ?>">
+              <th scope="row" class="url"><a href="<?php echo $url; ?>" target="_blank">
+                <?php if ($title === null) {
+                  echo "Untitled";
+                } else {
+                  echo $title;
+                } ?>
+              </th>
+              <td class="order-added"><?php echo $id; ?></td>
+              <td class="desc">
+                <div class="desc">
                   <?php if ($descr === '') {
                     echo "No description added.";
                   } else {
                     echo strtolower($descr);
                   } ?>
-                  </div>
-                      <?php 
-                      echo '<div class="itemTags">';
-                      
-                      if (empty($tag_html) === false) {
-                        echo '<strong>Tags: </strong>';
-                        echo $tag_html;
-                        }
-                      
-                      echo '</div>';
-                      
-                      ?>
-                       
-                  </td>
-                  <td class="cat" data-attr="<?php echo $cat; ?>"><?php echo $cat; ?></td>
-                </tr>
-              <?php } // end while loop for sites ?>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </body>
-    </html>
-    <style>
-    .fa-solid {
-      font-family:'Font Awesome 6 Free';
-    }
-  </style>
-  <script>
+                </div>
+                <div class="item-tags">
+                  <?php
+                  if (empty($tag_html) === false) {
+                    echo "<strong>Tags:</strong> $tag_html";
+                  } ?>
+                </div>
+              </td>
+              <td class="cat" data-attr="<?php echo $cat; ?>"><?php echo $cat; ?></td>
+              <td class="voting text-align-center" data-value="<?php echo $votes; ?>" data-id="<?php echo $id; ?>">
+                <p class="voting__amount hide"><?php echo $votes; ?></p>
+                <div class="voting__buttons">
+                  <?php
+                  $pressed_upvote = "false";
+                  $pressed_downvote = "false";
+
+                  while ($vote_item = mysqli_fetch_assoc($votes_result)) {
+                    if (intval($vote_item['site_id']) === $id) {
+                      if ($vote_item['vote'] === '1') { $pressed_upvote = "true"; }
+                      // if ($vote_item['vote'] === '0') { $pressed_downvote = "true"; }
+                    }
+                  }
+                  ?>
+                  <button type="button" value="recommend" aria-pressed="<?php echo $pressed_upvote; ?>">Recommend</button>
+                </div>
+              </td>
+            </tr>
+          <?php } // end while loop for sites ?>
+        </tbody>
+      </table>
+    </div>
+</main>
+</div>
+  <script type="text/javascript">
+  /* We will use these variables in the linked `scripts.js` file */
   var idArr = <?php echo json_encode($idarray); ?>;
   var urlArr = <?php echo json_encode($urlarray); ?>;
   var catArr = <?php echo json_encode($catarray); ?>;
-
-  var random;
-
-  $(function() {
-    $('#searchInput').val('');
-    $("#directory").tablesorter();
-    // this unchecks everything when refreshed
-    $('input[type="checkbox"]').each(function(){
-  	  $(this).prop('checked', false);
-    });
-  });
-
-  $('#surf').on("click", function(e) {
-    e.preventDefault();
-    random = Math.floor(Math.random() * urlArr.length);
-    console.log(shuffle(urlArr));
-    window.open(shuffle(urlArr)[0]);
-    shuffle(urlArr[0].pop());
-  });
-
-  // this puts all of the entries in a random order
-  function shuffle(urlArr) {
-    let currentIndex = urlArr.length, randomIndex;
-
-    // while there are items left to shuffle...
-    while (currentIndex != 0) {
-      // pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      // decrease
-      currentIndex--;
-
-      // swap with current element
-      [urlArr[currentIndex], urlArr[randomIndex]] = [urlArr[randomIndex], urlArr[currentIndex]];
-    }
-    return urlArr;
-  }
-
-
-  var firstClick = 0;
-  var selectedOptions = [];
-
-  $('input[type=checkbox]').on("change", function() {
-    var inputLength = $('input[type="checkbox"]').length;
-
-  // if it is the first click, we hide all of the rows by default, then show one by one...
-  if (firstClick === 0) {
-    $('tr').each(function(index) {
-      $(this).not('.tablesorter-headerRow').hide();
-    });
-  }
-
-  // once that runs once, firstClick becomes 1 so it doesn't run again
-  firstClick = 1;
-
-    // checks - if nothing is checked, show ALL
-     if ($('.filters').find('input:checked').length === 0) {
-       console.log('checkboxes full');
-      $('tr').each(function(index) {
-        $(this).show();
-        firstClick = 0;
-      });
-    }
-
-  var selected = $(this);
-  // if a checkbox is checked...
-  if ($(this).prop("checked") == true) {
-    // add value to array
-    selectedOptions.push($(this).val());
-    //console.log('checked');
-
-     var checked = $(this).val()
-
-     // loop through each tr element
-      $('tr').each(function(index) {
-        // grab the matching text from the cat cell
-        catText = $(this).children('.cat').text();
-        // if the category text matches the text in the table cell
-          if (catText === checked) {
-            console.log('matched');
-            // show it!
-            $(this).show();
-        }
-      });
-   } else {
-     console.log('unchecked');
-     var index = selectedOptions.indexOf(selected);
-     selectedOptions.splice(index, 1);
-     var unchecked = $(this).val()
-     $('tr').each(function(index) {
-        // grab the matching text from the cat cell
-        catText = $(this).children('.cat').text();
-        // if the category text matches the text in the table cell
-          if (catText === unchecked) {
-            console.log('matched');
-            // show it!
-            $(this).not('.tablesorter-headerRow').hide();
-        }
-
-      });
-
-   }
-  console.log(selectedOptions);
- });
- 
-
-  $('#searchInput').on('keyup', function(e) {
-    // value of text field
-    var value = $(this).val();
-    console.log(e.keyCode);
-
-    // assigns the pattern we're searching for
-    var patt = new RegExp(value, "i");
-    // in the #directory table, find each tr
-    $('#directory').find('tr').each(function() {
-      if(value.length === 0) {
-        // if search box is empty
-        // loop through rows and make highlight 'invisible'.
-        console.log('remove Mark');
-        //$(this).children('td.descr').children(mark))
-        $('mark').css('background-color', 'transparent');
-        $('mark').css('padding', '0');
-
-      }
-
-      var $table = $(this);
-
-      if (!($table.find('td').text().search(patt) >= 0)) {
-        $table.not('.tablesorter-headerRow').hide();
-      }
-
-      if (($table.find('td').text().search(patt) >= 0)) {
-        $(this).show();
-        var td = $(this).children('td.desc').children('div.desc');
-        var matchedRow = td.text();
-        var newMarkup = matchedRow.replace(value, '<mark>' + value + '</mark>');
-        td.html(newMarkup);
-
-      }
-    });
-  });
-
-  $('.myTags').on("click", function() {
-    $('.tagFilter').css("display", "block");
-    console.log($(this).data("tag-id"));
-    var tagID = $(this).data("tag-id");
-
-    $('tr').each(function(index) {
-      if ($(this).children('.desc').children('.itemTags').children('.myTags').data("tag-id") == tagID) {
-        console.log('matched tag!');
-        //$(this).css('color', 'red');
-        // get name of tag
-        var myTags = $(this).children('.desc').children('.itemTags').children('.myTags');
-        var selectedTag = document.querySelectorAll("[data-tag-id='" + tagID + "']")[0].innerText;
-        $('#currentTag').html(selectedTag);
-        $(this).show();
-      } else {
-        $(this).hide();
-      }
-    })
-  })
-
-  $('#showAll').on("click", function() {
-    $('tr').each(function(index) {
-      $('.tagFilter').css("display", "none");
-      $(this).show();
-    });
-  })
-
-</script>
+  </script>
+  <script src="assets/js/scripts.js?v=2022-05-11-am" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

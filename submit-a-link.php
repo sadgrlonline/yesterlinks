@@ -3,9 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <title>Yesterlinks | Submit a Link</title>
+    <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script data-goatcounter="https://yesterweb.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script
+    <script data-goatcounter="https://yesterweb.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <?php
     include 'config.php';
@@ -19,7 +20,7 @@
 ?>
     <body>
         <div class="container">
-            <?php include 'navigation.php' ?>
+            <?php include 'navigation.php'; ?>
             <div class="wrapper">
                 <div class="contain">
                     <h1>Submit a Link</h1>
@@ -53,15 +54,6 @@
                 </div>
             </div>
         </div>
-        <style>
-            label {
-                font-weight:bold;
-                display:block;
-            }
-            form {
-                margin-left:20px;
-            }
-            </style>
     </body>
 <?php
 
@@ -90,7 +82,7 @@ console.log('test');
 
     submitBtn.disabled = true;
 
-   
+
 
     urlInput.addEventListener("change", checkIfDupe);
     botField.addEventListener("keyup", checkIfBot);
@@ -117,7 +109,6 @@ function checkIfBot() {
     } else {
         console.log('no dupe');
         dupe.style.display = "none";
-        submitBtn.disabled = false;
     }
     }
 
@@ -136,6 +127,5 @@ function checkIfBot() {
     for (let i = 0; i < results.length; i++) {
         $('#categories').append('<option value="' + results[i] + '" name="categories">' + results[i] + '</option>');
     }
-
     </script>
 </html>
