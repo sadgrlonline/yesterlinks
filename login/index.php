@@ -1,9 +1,23 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!empty($_SESSION['username'])) {
+  header("location: ../admin");
+}
+
+if (isset($_GET['action']) && $_GET['action'] === "logout") {
+  session_destroy();
+  header("location: /yesterlinks");
+}
+?>
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../style.css" media="all">
+    <link rel="stylesheet" href="../assets/css/style.css" media="all">
+    <title>Yesterlinks | Login</title>
 </head>
     <body>
         <div class="container">
