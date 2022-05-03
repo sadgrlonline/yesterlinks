@@ -1,0 +1,68 @@
+.descrInput {
+  width: 100%;
+  max-width: 45ch;
+}
+
+.tags {
+  min-width: 250px;
+}
+
+.tags ul {
+  padding: 0 0 0 1em;
+}
+
+.tags__edit {
+  width: 200px;
+  max-height: 20ch;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: grid;
+  grid-template-rows: repeat(6, max-content);
+  gap: 1ch;
+}
+
+#submit {
+  margin-left: 20px;
+}
+
+.edit[aria-pressed="true"],
+.save {
+  display: none;
+}
+
+.edit[aria-pressed="true"] + .save {
+  display: block;
+}
+
+label.display-block,
+legend {
+  font-weight: bold;
+}
+
+.filters label {
+  font-weight: bold;
+}
+
+#honeypot {
+  display: none;
+}
+
+#filters {
+  width: 50%;
+  margin-bottom: 10px;
+}
+
+input:not(input[type="checkbox"]) {
+  margin-bottom: 10px;
+}
+
+#dupe {
+  color: red;
+  font-weight: bold;
+  display: none;
+}
+
+.urlAdmin {
+  max-width: 200px;
+  word-wrap: break-word;
+}
