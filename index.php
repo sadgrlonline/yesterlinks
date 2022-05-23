@@ -172,6 +172,7 @@
                     echo "<strong>Tags:</strong> $tag_html";
                   } ?>
                 </div>
+               
               </td>
               <td class="cat" data-attr="<?php echo $cat; ?>"><?php echo $cat; ?></td>
               <td class="voting text-align-center" data-value="<?php echo $votes; ?>" data-id="<?php echo $id; ?>">
@@ -189,6 +190,7 @@
                   }
                   ?>
                   <button type="button" value="recommend" aria-pressed="<?php echo $pressed_upvote; ?>">Recommend</button>
+                  <a href="report.php?entry=<?php echo $id; ?>"><button id="reportSite" value="report">Report</button></a>
                 </div>
               </td>
             </tr>
@@ -198,6 +200,15 @@
     </div>
 </main>
 </div>
+<style>
+#reportSite {
+  background-color:transparent;
+  color:white;
+  font-size:smaller;
+  border:none;
+  cursor:pointer;
+}
+</style>
   <script type="text/javascript">
   /* We will use these variables in the linked `scripts.js` file */
   var idArr = <?php echo json_encode($idarray); ?>;
