@@ -13,6 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
         if (isset($_SESSION['username'])) {
           ?>
           <li><a href="/admin">Admin</a></li>
+          <li><a href="/reports">Reports</a></li>
           <li><a href="../login?action=logout">Logout</a></li>
         <?php } ?>
     </ul>
