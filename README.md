@@ -14,6 +14,7 @@ The goal of this project is to create a database of links to cool or interesting
 
 ## New Features
 
+- A report system which allows users to report a link
 - Category checkbox filters
 - Search filter
 - Tagging system (thank you @amethystcube !!!!)
@@ -80,11 +81,24 @@ Each row of the `votelist` table has 5 columns:
 
 ### Table: `users`
 
-[Table description in progress]
+Each row of the `users` table has eight columns:
 
-### Table: `password_reset_temp`
+1. `id`: unique identifier for each row
+2. `datetime`: date of registration
+3. `email`: user email
+4. `name`: user name
+5. `username`: username
+6. `password`: password encoded with bcrypt
+7. `hash`: password encrypted with MD5
+8. `active`: whether or not the account is active (0 or 1)
 
-[Table description in progress]
+## Table: `password_reset_temp`
+
+Each row of the `password_reset_temp` table has three columns:
+
+1. `username`: username
+2. `key`: validation key that is appended to the email link
+3. `expDate`: date the validation key expires
 
 ## How to Clone & Make a Copy
 
