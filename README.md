@@ -92,7 +92,7 @@ Each row of the `users` table has eight columns:
 7. `hash`: password encrypted with MD5
 8. `active`: whether or not the account is active (0 or 1)
 
-## Table: `password_reset_temp`
+### Table: `password_reset_temp`
 
 Each row of the `password_reset_temp` table has three columns:
 
