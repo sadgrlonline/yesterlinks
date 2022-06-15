@@ -55,13 +55,13 @@
 <label>Please select a reason for your report:</label>
 <select name="reportReason" required>
   <option></option>
-  <option value="hateful">Link contains hateful and discriminatory content</option>
-  <option value="commercial">Link contains commercial content</option>
-  <option value="false">Link contains false or misleading information</option>
-  <option value="broken">Link is broken</option>
-  <option value="miscategorized">Link is miscategorized</option>
-  <option value="ads">Link has too many ads</option>
-  <option value="other">Other</option>
+  <option value="it contains hateful content">Link contains hateful and discriminatory content</option>
+  <option value="it promotes commercial content">Link contains commercial content</option>
+  <option value="it promotes false or misleading information">Link contains false or misleading information</option>
+  <option value="the link is broken">Link is broken</option>
+  <option value="it is miscategorized">Link is miscategorized</option>
+  <option value="it has too many ads">Link has too many ads</option>
+  <option value="of another reason, below">Other</option>
 </select><br><br>
 <label>Additional information you'd like to include:</label>
 <textarea name="extraNotes" class="reportField"></textarea>

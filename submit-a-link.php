@@ -32,7 +32,6 @@
                         <label>Webpage Title</label> <input type="text" name="titleInput" id="titleInput" required><br>
                         <label>Webpage URL</label> <input type="url" name="urlInput" id="urlInput" required><br><span id="dupe">This item is a duplicate.</span>
                         <label>Webpage Description</label><textarea name="descrInput" id="descrInput" required></textarea><br>
-                        <label>Webpage Category</label> <select name="categories" id="categories"><option></option></select>
                         <fieldset class="tags__edit">
                           <legend>Website Tags</legend>
                           <?php
@@ -54,6 +53,20 @@
                 </div>
             </div>
         </div>
+        <style>
+            label {
+                padding-bottom:15px;
+                color:var(--accent2);
+            }
+            textarea {
+                font-family:sans-serif;
+                font-size:20px;
+                padding:5px;
+            }
+            fieldset {
+                width:200px;
+            }
+            </style>
     </body>
 <?php
 
