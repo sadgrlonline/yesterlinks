@@ -11,12 +11,6 @@
 <?php
     include 'config.php';
 
-    $sql = "SELECT DISTINCT category FROM websites";
-    $catArray = [];
-    $result = mysqli_query($con, $sql);
-    while ($row = $result->fetch_assoc()) {
-        $catArray[] = $row['category'];
-    }
 ?>
     <body>
         <div class="container">
