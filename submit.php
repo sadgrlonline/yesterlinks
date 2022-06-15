@@ -200,8 +200,8 @@ if (isset($_POST['cat'])) {
 
 
   /* Update everything but the tags */
-  $stmt = $con->prepare("UPDATE websites SET title = ?, url = ?, descr = ?, category = ? WHERE id = ?");
-  $stmt->bind_param("sssss", $title, $url, $descr, $cat, $id);
+  $stmt = $con->prepare("UPDATE websites SET title = ?, url = ?, descr = ? WHERE id = ?");
+  $stmt->bind_param("ssss", $title, $url, $descr, $id);
   $stmt->execute();
   $result = $stmt->get_result();
   $stmt->close();
@@ -274,7 +274,7 @@ if (isset($_POST['del'])) {
 /* This generates the JSON file */
 function generateJSON($con) {
   $rows = array();
-  $sql = ("SELECT id, title, url, descr, category FROM websites WHERE pending = 0");
+  $sql = ("SELECT id, title, url, descr FROM websites WHERE pending = 0");
   mysqli_set_charset($con, 'utf8');
   if ($result = mysqli_query($con, $sql)) {
     if (mysqli_num_rows($result) > 0) {
@@ -313,8 +313,8 @@ if (isset($_POST['submit'])) {
   );
 
   /* Insert the item into the database; because tags are stored in a separate table, adding them will happen later */
-  $stmt = $con->prepare("INSERT INTO websites(title, url, descr, category) VALUES (?,?,?,?)");
-  $stmt->bind_param("ssss", $title, $url, $descr, $cat);
+  $stmt = $con->prepare("INSERT INTO websites(title, url, descr) VALUES (?,?,?)");
+  $stmt->bind_param("ssss", $title, $url, $descr);
   $stmt->execute();
   $stmt->close();
 

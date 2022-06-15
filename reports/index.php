@@ -20,7 +20,7 @@
                 <h1>Reported Links</h1>
                 <br><br>
                 <?php
-                $stmt = $con->prepare("SELECT reports.date, reports.reportReason, reports.extraNotes, websites.id, websites.title, websites.url, websites.descr FROM reports JOIN websites ON reports.websites_id = websites.id");
+                $stmt = $con->prepare("SELECT reports.id as reports_id, reports.date, reports.reportReason, reports.extraNotes, websites.id as websites_id, websites.title, websites.url, websites.descr FROM reports JOIN websites ON reports.websites_id = websites.id");
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $number = mysqli_num_rows($result);
@@ -30,29 +30,34 @@
                 while ($row = $result->fetch_assoc()) {
                     $title = $row['title'];
                     $url = $row['url'];
-                    $website_id = $row['id'];
+                    $website_id = $row['websites_id'];
+                    $report_id = $row['reports_id'];
                     $descrip = $row['descr'];
                     $reportReason = $row['reportReason'];
                     $extraNotes = $row['extraNotes'];
                     $date = $row['date'];
                     $formattedDate = date("m/d/Y", strtotime($date));
-                    echo "<a href='" . $url . "'>" . $title . "</a> has been reported as <strong> " . $reportReason . "</strong> on <strong>" . $formattedDate . "</strong>";
+                    echo "On <strong>" . $formattedDate . "</strong>, the link <a href='" . $url . "'>" . $title . "</a> was reported </strong> because <strong>" . $reportReason . "</strong>";
+                    
+                    echo "<p><strong>Additional information: </strong>";
+
+                    if (!empty($extraNotes)) {
+                        echo $extraNotes . "</p>";
+                    } else {
+                        echo "<p>No further information provided.</p>";
+                    }
                     echo "<p><strong>Website Description: </strong>";
                     if (!empty($descrip)) {
                         echo $descrip . "</p>";
                     } else {
                         echo "<p>No description added.</p>";
                     }
-                    echo "<p><strong>Notes about report: </strong>";
-
-                    if (!empty($extraNotes)) {
-                        echo $extraNotes . "</p>";
-                    } else {
-                        echo "<p>No further information added.</p>";
-                    }
                     echo "<form method='POST' action='index.php'>";
                     echo "<input type='hidden' name='id' value='" . $website_id . "'>";
-                    echo "<input type='submit' id='delete' value='Delete Link' name='del'><br><br>";
+                    echo "<input type='hidden' name='reportId' value='" . $report_id . "'>";
+                    echo "<input type='submit' id='delete' value='Delete Link' name='del'> ";
+                    echo "|";
+                    echo "<input type='submit' id='deleteReport' value=' Delete Report' name='delReport'><br><br>";
                     echo "</form>";
                 }
             } else {
@@ -82,15 +87,25 @@ function generateJSON($con) {
                     $stmt->execute();
                     $stmt->close();
                     generateJSON($con);
-                    header('location: ../admin/');
+                    header('location: ../reports/');
                   }
+
+                if (isset($_POST['delReport'])) {
+                $id = $_POST['reportId'];
+                $stmt = $con->prepare("DELETE FROM reports WHERE id = ?");
+                $stmt->bind_param("s", $id);
+                $stmt->execute();
+                $stmt->close();
+                generateJSON($con);
+                header('location: ../reports/');
+                }
                 ?>
           <style>
               .report {
                   border:1px solid var(--accent);
                   padding:10px;
               }
-              #delete {
+              #delete, #deleteReport {
                   background-color:transparent;
                   color:red;
                   border:none;

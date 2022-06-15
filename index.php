@@ -7,10 +7,13 @@
   <script type="text/javascript" src="assets/js/jquery.tablesorter.min.js"></script>
   <link rel="stylesheet" href="assets/css/style.css?v=2022-04-30">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  <title>Yesterlinks</title>
+<script data-goatcounter="https://yesterlinks.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
-  <?php if ($_SERVER['HTTP_HOST'] !== "links.yesterweb.org") { ?>
+  <?php 
+  error_reporting(E_ERROR | E_WARNING | E_PARSE);
+  if ($_SERVER['HTTP_HOST'] !== "links.yesterweb.org") { ?>
   <p class="banner">This is a copy of <a href="https://github.com/sadgrlonline/yesterlinks/">sadgrlonline's repository</a>. The most updated version of this project (with even more links!) lives at <a href="https://links.yesterweb.org">links.yesterweb.org</a>. Have fun!</p>
 <?php } ?>
   <div class="container">
@@ -27,11 +30,13 @@
   remove_expired_votes($con, "$decay ago");
   ?>
 
-    <?php include 'navigation.php'; ?>
+    <?php include 'navigation.php'; 
+    ?>
       <section class="display-flex">
         <div>
           <h1>Yesterlinks</h1>
           <p>Remember when the internet felt exciting and mysterious?</p>
+<p><img src="https://yesterweb.org/img/buttons/yesterlinks-button.png"></p>
           <p>Here are <strong><?php echo $totalCount; ?></strong> links!</p>
           <details>
             <summary>What is this?</summary>
@@ -41,46 +46,54 @@
             <hr>
             <p>Recommendations will decay over time, and they disappear completely after <?php echo $decay; ?>.</p>
           </details>
+          <details>
+            <summary>Changelog</summary>
+            <ul>
+              <li><strong>6/15/22:</strong> Removed categories & category filtering, as they were too broad. In place of category filtering, there is now a dropdown to view all tags and choose one to sort.</li>
+              <li><strong>5/23/22:</strong> Added a 'report' feature to report websites that are down or otherwise shouldn't be listed.</li>
+              <li><strong>5/02/22:</strong> Added a recommendation system which decays votes over the course of 30 days.</li>
+              <li><strong>3/16/22:</strong> Added a tagging system for the links.</li>
+            </ul>
+            <p>View the <a href="https://github.com/sadgrlonline/yesterlinks" target="_blank">GitHub repo</a> to contribute.</p>
+          </details>
         </div>
         <div class="surf">
           <a href="surf.php" id="surf" target="_blank" aria-label="Random site (opens in a new tab)">Random</a>
           <p>This will open a site at random in a new tab.</p>
-          <p>You can even bookmark it for easy access!</p>
+          <p>You can drag it to your bookmark bar for easy access!</p>
         </div>
       </section>
       <main>
       <div class="display-flex filter-search">
         <div id="filters">
-          <details>
+          <?php 
+
+          $sql = "SELECT COUNT(id) FROM tags";
+          $qry = mysqli_query($con, $sql);
+          $totalTags = mysqli_fetch_assoc($qry)['COUNT(id)'];
+
+          ?>
+        <details>
             <summary class="filter-button">
-              <i class="fa fa-filter fa-1x"></i> <span class="intro">FILTER</a>
+              <i class="fa fa-filter fa-1x"></i> <span class="intro">View Tags</a>
             </summary>
-              <div class="filters">
-                <div class="filter">
-                  <input type="checkbox" id="fun" value="fun">
-                  <label for="fun">Fun</label>
-                </div>
-                <div class="filter">
-                  <input type="checkbox" id="healing" value="healing">
-                  <label for="healing">Healing</label>
-                </div>
-                <div class="filter">
-                  <input type="checkbox" id="serious" value="serious">
-                  <label for="serious">Serious</label>
-                </div>
-                <div class="filter">
-                  <input type="checkbox" id="useful" value="useful">
-                  <label for="useful">Useful</label>
-                </div>
-                <div class="filter">
-                  <input type="checkbox" id="social" value="social">
-                  <label for="social">Social</label>
-                </div>
-                <div class="filter">
-                  <input type="checkbox" id="personal" value="personal">
-                  <label for="personal">Personal</label>
-                </div>
-              </details>
+            <p>Click on a tag to filter the list.</p>
+            <!-- <p>There are <?php echo $totalTags; ?> tags.</p> -->
+            <div class="item-tags">
+            <?php 
+            $stmt = $con->prepare("SELECT * FROM tags ORDER BY name ASC");
+            $stmt->execute();
+              $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+              $name = $row["name"];
+              $id = $row["id"];
+              echo "<button data-tag-id=" . $id . ">" . $name . "</button>";
+            }
+            $stmt->close();
+          
+            ?>
+            </div>
+  </details>
             </div>
             <div id="search">
               <label for="search-input">Search: </label>
@@ -103,7 +116,6 @@
           <th scope="col" class="url">Title <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
           <th scope="col" class="order-added">Order Added <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
           <th scope="col" class="descr">Description <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
-          <th scope="col" class="cat">Category <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
           <th scope="col" class="votes sorter-digit">Community <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
         </thead>
         <tbody>
@@ -123,12 +135,10 @@
           while ($row = $result->fetch_assoc()) {
             $idarray[] = $row['id'];
             $urlarray[] = $row['url'];
-            $catarray[] = $row['category'];
             $id = $row['id'];
             $title = $row['title'];
             $descr = $row['descr'];
             $url = $row['url'];
-            $cat = $row['category'];
 
             /* Get tags */
             $tags_query = "SELECT tag_id, tags.name FROM taglist JOIN tags ON taglist.tag_id = tags.id WHERE site_id =" . $row['id'] . " ORDER BY tags.name ASC";
@@ -149,7 +159,7 @@
             $votes_result = mysqli_query($con, $votes_query); // we'll use this later to set the state of the voting buttons
             ?>
 
-            <tr class="<?php echo $cat; ?>" id="<?php echo $id; ?>">
+            <tr id="<?php echo $id; ?>">
               <th scope="row" class="url"><a href="<?php echo $url; ?>" target="_blank">
                 <?php if ($title === null) {
                   echo "Untitled";
@@ -174,7 +184,6 @@
                 </div>
                
               </td>
-              <td class="cat" data-attr="<?php echo $cat; ?>"><?php echo $cat; ?></td>
               <td class="voting text-align-center" data-value="<?php echo $votes; ?>" data-id="<?php echo $id; ?>">
                 <p class="voting__amount hide"><?php echo $votes; ?></p>
                 <div class="voting__buttons">
@@ -189,7 +198,7 @@
                     }
                   }
                   ?>
-                  <button type="button" value="recommend" aria-pressed="<?php echo $pressed_upvote; ?>">Recommend</button>
+                  <button type="button" value="recommend" aria-pressed="<?php echo $pressed_upvote; ?>">Recommend</button><br>
                   <a href="report.php?entry=<?php echo $id; ?>"><button id="reportSite" value="report">Report</button></a>
                 </div>
               </td>
@@ -208,6 +217,7 @@
   border:none;
   cursor:pointer;
 }
+
 </style>
   <script type="text/javascript">
   /* We will use these variables in the linked `scripts.js` file */
