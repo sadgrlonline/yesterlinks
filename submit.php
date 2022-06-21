@@ -1,3 +1,4 @@
+
 <?php
 include 'config.php';
 
@@ -187,11 +188,12 @@ if (isset($_POST['action'])) {
 }
 
 /* Edits from admin page */
-if (isset($_POST['id'])) {
+if (isset($_POST['title'])) {
   $id = $_POST['id'];
   $title = $_POST['title'];
   $url = $_POST['url'];
   $descr = $_POST['descr'];
+  //$cat = $_POST['cat'];
   $tags = array(
     'db'  => array(), // store the tags from the database
     'new' => json_decode($_POST['tags']), // store the tags from the POST request
@@ -305,6 +307,7 @@ if (isset($_POST['submit'])) {
   $title = $_POST['titleInput'];
   $url = $_POST['urlInput'];
   $descr = $_POST['descrInput'];
+  //$cat = $_POST['categories'];
   $tags = array(
     'db'  => array(), // store the tags from the database
     'new' => array(), // store the tags from the POST request
@@ -362,3 +365,4 @@ if (isset($_POST['approved'])) {
 
   generateJSON($con);
 }
+
