@@ -38,7 +38,6 @@ if (empty($_SESSION['username'])) {
               <th class="title">Title <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
               <th class="urlAdmin title">URL <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
               <th class="descr">Description <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
-              <th class="cat title">Category <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
               <th class="cat title">Tags <i class="fa fa-sort fa-1x"></i><i class="fa fa-sort-asc fa-1x"></i><i class="fa fa-sort-desc fa-1x"></i></th>
               <th class="cat title" colspan="3">Options</th>
             </tr>
@@ -63,17 +62,14 @@ if (empty($_SESSION['username'])) {
 
         $idarray = [];
         $urlarray = [];
-        $catarray = [];
 
         while ($row = $result->fetch_assoc()) {
           $idarray[] = $row['id'];
           $urlarray[] = $row['url'];
-          $catarray[] = $row['category'];
           $id = $row['id'];
           $title = $row['title'];
           $descr = $row['descr'];
           $url = $row['url'];
-          $cat = $row['category'];
           $is_pending = $row['pending'];
 
           $tags_query = "SELECT tag_id, tags.name FROM taglist JOIN tags ON taglist.tag_id = tags.id WHERE site_id =" . $row['id'] . " ORDER BY tags.name ASC";
@@ -87,7 +83,7 @@ if (empty($_SESSION['username'])) {
             $tag_html .= "<li data-tag-id=" . $single_tag['tag_id'] . ">" . $single_tag['name'] . "</li>";
           } ?>
 
-          <tr class="<?php echo $cat; ?> row" id="<?php echo $id; ?>">
+          <tr class="row" id="<?php echo $id; ?>">
             <td class="title"><?php if ($title === null) {
                 echo "Untitled";
               } else {
@@ -99,7 +95,6 @@ if (empty($_SESSION['username'])) {
               } else {
                 echo strtolower($descr);
               } ?></td>
-              <td class="cat" data-attr="<?php echo $cat; ?>"><?php echo $cat; ?></td>
               <td class="tags">
                 <ul>
                   <?php if (empty($tag_html) === false) {
@@ -163,8 +158,17 @@ if (empty($_SESSION['username'])) {
     /* We will use these variables in the linked `scripts.js` file */
     var idArr = <?php echo json_encode($idarray); ?>;
     var urlArr = <?php echo json_encode($urlarray); ?>;
-    var catArr = <?php echo json_encode($catarray); ?>;
     </script>
-    <script src="../assets/js/admin-scripts.js?v=2022-04-30" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../assets/js/admin-scripts.js?v=2022-04-30" type="text/javascript" charset="utf-8">
+    </script>
+
+    <style>
+      .container {
+        max-width:1500px !important;
+      }
+    
+      </style>
+
 </body>
 </html>
